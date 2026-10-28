@@ -37,7 +37,7 @@
       <span class="spacer"></span><button class="btn small" id="pg-undo" type="button">Undo (Z)</button><button class="btn small" id="pg-rs" type="button">Restart (R)</button></div>
       <div class="pg-stage" tabindex="0" id="pg-stage" aria-label="Puzzle game. Use arrow keys or WASD to move."></div>
       <div class="pg-pad" aria-label="Touch controls"><button type="button" data-d="0,-1" aria-label="Up">▲</button><button type="button" data-d="-1,0" aria-label="Left">◀</button><button type="button" data-d="1,0" aria-label="Right">▶</button><button type="button" data-d="0,1" aria-label="Down">▼</button></div>
-      <p class="demo-note" id="pg-msg" aria-live="polite">Click the board, then use arrow keys or WASD. Push every crate onto a switch to open the door, then reach the exit.</p>
+      <p class="demo-note" id="pg-msg" aria-live="polite">Click the board, then use arrow keys or WASD. Push every crate onto a switch to open the door, then reach the exit. This web version has 4 of the 6 levels.</p>
       <div class="pg-levels">${LEVELS.map((_, i) => `<button type="button" class="chip" data-l="${i}">Level ${i + 1}</button>`).join("")}</div>`;
     const stage = host.querySelector("#pg-stage");
     const { c, ctx } = canvas(stage, 480, 320, "Puzzle board");
@@ -115,7 +115,7 @@
       <div class="pg-stage" tabindex="0" id="ga-stage" aria-label="Sprite scene. Left and right arrows walk, up or space jumps."></div>
       <div class="pg-pad two"><button type="button" data-k="l" aria-label="Walk left">◀</button><button type="button" data-k="j" aria-label="Jump">⤒</button><button type="button" data-k="r" aria-label="Walk right">▶</button></div>
       <div class="ctl-row">${slider("ga-fps", "Animation speed", 4, 24, 1, 12, " fps")}</div>
-      <p class="demo-note">Arrow keys or A and D to walk, up or space to jump. The character is an 8 frame, 32 × 32 px walk cycle using the 16 colour palette.</p>`;
+      <p class="demo-note">Arrow keys or A and D to walk, up or space to jump. The character uses the 8 frame walk cycle at 12 fps, drawn from the project palette.</p>`;
     const stage = host.querySelector("#ga-stage");
     const { c, ctx } = canvas(stage, 480, 240, "Pixel scene with walking character");
     const fpsIn = bindOut(host, "ga-fps", " fps");
@@ -175,33 +175,33 @@
   /* ================= Motor mount: explode and adjust ================= */
   D["motor-mount"] = host => {
     const parts = [
-      ["1","MM-100","Base plate","S275, 10 mm","1","base"],["2","MM-110","Bracket, slotted","S275, 6 mm","2","bracket"],["3","MM-120","Spacer","Al 6061","4","spacer"],
+      ["1","MM-100","Base plate","A36, 10 mm","1","base"],["2","MM-110","Bracket, slotted","A36, 8 mm","2","bracket"],["3","MM-120","Spacer","Al 6061","4","spacer"],
       ["4","MM-130","Cover","Polycarbonate","1","cover"],["5","ISO 4762","Socket cap screw M8×30","8.8 zinc","8","screw"],["6","MOTOR","Drive motor (supplier STEP)","Purchased","1","motor"]];
     host.innerHTML = `<div class="demo-bar"><strong class="demo-title">Assembly viewer</strong><span class="spacer"></span>
       <button class="btn small" type="button" id="mm-cover" aria-pressed="true">Hide cover</button><button class="btn small" type="button" id="mm-anim">Play assembly</button></div>
       <div class="mm-wrap"><div class="mm-svg" id="mm-svg"></div>
-      <div class="mm-side"><div class="ctl-row col">${slider("mm-ex", "Explode", 0, 100, 1, 0, " %")}${slider("mm-slot", "Slot position", 0, 20, 0.5, 6, " mm")}</div>
+      <div class="mm-side"><div class="ctl-row col">${slider("mm-ex", "Explode", 0, 100, 1, 0, " %")}${slider("mm-slot", "Slot position", 0, 30, 0.5, 9, " mm")}</div>
       <div class="mm-read" id="mm-read"></div>
       <table class="mini" id="mm-bom"><thead><tr><th>Item</th><th>Description</th><th>Qty</th></tr></thead><tbody>${parts.map(p => `<tr data-p="${p[5]}" tabindex="0"><td>${p[0]}</td><td>${p[2]}<small>${p[1]} · ${p[3]}</small></td><td>${p[4]}</td></tr>`).join("")}</tbody></table></div></div>
       <p class="demo-note">Drag the sliders. Hover a part or a BOM row to highlight it in both places. Moving the motor along the slots changes belt centre distance and tension.</p>`;
     const svgHost = host.querySelector("#mm-svg"), ex = bindOut(host, "mm-ex", " %"), slot = bindOut(host, "mm-slot", " mm");
     let cover = true, hl = null;
     function render() {
-      const e = +ex.value / 100, s = +slot.value, mx = s * 3;
+      const e = +ex.value / 100, s = +slot.value, mx = s * 2;
       const off = k => e * k * 40;
-      const tension = Math.round(120 + s * 14), centre = (180 + s).toFixed(1);
+      const tension = Math.round(120 + s * 9), centre = (180 + s).toFixed(1);
       const g = (id, body) => `<g data-p="${id}" class="mm-part ${hl === id ? "hl" : ""}">${body}</g>`;
       svgHost.innerHTML = `<svg viewBox="0 0 520 330" role="img" aria-label="Motor mount assembly">
         ${g("base", `<rect x="40" y="${250 + off(1)}" width="320" height="22" class="pt"/><rect x="40" y="${272 + off(1)}" width="320" height="8" class="pt2"/>`)}
         ${g("spacer", [70, 130, 270, 330].map(x => `<rect x="${x - 8}" y="${236 + off(0.5)}" width="16" height="14" class="ac-fill"/>`).join(""))}
-        ${g("bracket", [100, 300].map(x => `<rect x="${x - 22}" y="${170 - off(0.2)}" width="44" height="66" class="pt2"/><rect x="${x - 16}" y="${206 - off(.2)}" width="32" height="10" rx="5" class="slot"/><circle cx="${x - 12 + s * 1.2}" cy="${211 - off(.2)}" r="3.5" class="ink-fill"/>`).join(""))}
+        ${g("bracket", [100, 300].map(x => `<rect x="${x - 22}" y="${170 - off(0.2)}" width="44" height="66" class="pt2"/><rect x="${x - 16}" y="${206 - off(.2)}" width="32" height="10" rx="5" class="slot"/><circle cx="${x - 12 + s * 0.8}" cy="${211 - off(.2)}" r="3.5" class="ink-fill"/>`).join(""))}
         ${g("motor", `<rect x="${110 + mx}" y="${100 - off(1.3)}" width="180" height="70" rx="10" class="pt"/>${[112, 128, 144, 160].map(y => `<line x1="${120 + mx}" y1="${y - off(1.3)}" x2="${280 + mx}" y2="${y - off(1.3)}" class="ln thin"/>`).join("")}<rect x="${290 + mx}" y="${128 - off(1.3)}" width="40" height="12" class="ink-fill"/><circle cx="${336 + mx}" cy="${134 - off(1.3)}" r="14" class="pt2"/>`)}
-        ${g("screw", [100, 300].map(x => `<rect x="${x - 12 + s * 1.2 - 4}" y="${150 - off(2.2)}" width="8" height="${22}" class="ink-fill"/><rect x="${x - 12 + s * 1.2 - 7}" y="${146 - off(2.2)}" width="14" height="6" class="ink-fill"/>`).join(""))}
+        ${g("screw", [100, 300].map(x => `<rect x="${x - 12 + s * 0.8 - 4}" y="${150 - off(2.2)}" width="8" height="${22}" class="ink-fill"/><rect x="${x - 12 + s * 0.8 - 7}" y="${146 - off(2.2)}" width="14" height="6" class="ink-fill"/>`).join(""))}
         <circle cx="470" cy="134" r="22" class="pt2"/><text x="470" y="176" class="tx sm" text-anchor="middle">Driven pulley</text>
-        <path d="M${336 + mx} ${120 - off(1.3)} L470 112 M${336 + mx} ${148 - off(1.3)} Q${(400 + mx / 2)} ${156 - off(1.3) + (20 - s) * 1.2} 470 156" class="belt"/>
+        <path d="M${336 + mx} ${120 - off(1.3)} L470 112 M${336 + mx} ${148 - off(1.3)} Q${(400 + mx / 2)} ${156 - off(1.3) + (30 - s) * 0.8} 470 156" class="belt"/>
         ${cover ? g("cover", `<rect x="${100 + mx}" y="${70 - off(3)}" width="200" height="${110}" rx="14" class="cover"/>`) : ""}
       </svg>`;
-      host.querySelector("#mm-read").innerHTML = `<div><span>Belt centre distance</span><strong>${centre} mm</strong></div><div><span>Static belt tension</span><strong>${tension} N</strong></div><div><span>Slot travel used</span><strong>${Math.round(s / 20 * 100)} %</strong></div>`;
+      host.querySelector("#mm-read").innerHTML = `<div><span>Belt centre distance</span><strong>${centre} mm</strong></div><div><span>Static belt tension</span><strong>${tension} N</strong></div><div><span>Slot travel used</span><strong>${Math.round(s / 30 * 100)} %</strong></div>`;
       host.querySelectorAll("#mm-bom tr[data-p]").forEach(r => r.classList.toggle("hl", r.dataset.p === hl));
     }
     const setHl = id => { if (hl !== id) { hl = id; render(); } };
@@ -225,18 +225,18 @@
     host.innerHTML = `<div class="demo-bar"><strong class="demo-title">Bracket hand check</strong><span class="spacer"></span>
       <div class="seg" role="group" aria-label="View"><button type="button" class="chip" data-v="stress" aria-pressed="true">Stress</button><button type="button" class="chip" data-v="mode" aria-pressed="false">Mode 1</button></div></div>
       <div class="pg-stage" id="fe-stage"></div>
-      <div class="ctl-row">${slider("fe-f", "Load F", 200, 2500, 50, 1200, " N")}${slider("fe-t", "Flange thickness", 4, 14, 0.5, 10, " mm")}${slider("fe-l", "Arm length", 60, 180, 5, 80, " mm")}</div>
+      <div class="ctl-row">${slider("fe-f", "Load F", 100, 2000, 50, 500, " N")}${slider("fe-t", "Flange thickness", 4, 14, 0.5, 8, " mm")}${slider("fe-l", "Arm length", 60, 180, 5, 80, " mm")}</div>
       <div class="mm-read wide" id="fe-read"></div>
-      <p class="demo-note">A cantilever hand check that I use alongside the full model. Bending stress σ = 6FL / (b t²), tip deflection δ = FL³ / (3EI), first mode from Euler Bernoulli beam theory. Steel, E = 210 GPa, yield 250 MPa, flange width 40 mm, 0.6 kg motor mass at the tip.</p>`;
+      <p class="demo-note">A cantilever hand check that I use alongside the full model. Bending stress σ = 6FL / (b t²), tip deflection δ = FL³ / (3EI), first mode from Euler Bernoulli beam theory. ASTM A36, E = 200 GPa, yield 250 MPa, flange width 40 mm, 8 kg motor mass at the tip, motor excitation 25 Hz.</p>`;
     const { c, ctx } = canvas(host.querySelector("#fe-stage"), 520, 240, "Bracket stress or mode shape");
     const F = bindOut(host, "fe-f", " N"), T = bindOut(host, "fe-t", " mm"), Lr = bindOut(host, "fe-l", " mm");
     let view = "stress";
     host.querySelectorAll(".seg .chip").forEach(b => b.addEventListener("click", () => { view = b.dataset.v; host.querySelectorAll(".seg .chip").forEach(x => x.setAttribute("aria-pressed", String(x === b))); }));
     const stop = loop((dt, time) => {
-      const f = +F.value, t = +T.value / 1000, L = +Lr.value / 1000, b = 0.04, E = 210e9, I = b * t ** 3 / 12, rho = 7850, A = b * t, mTip = 0.6;
+      const f = +F.value, t = +T.value / 1000, L = +Lr.value / 1000, b = 0.04, E = 200e9, I = b * t ** 3 / 12, rho = 7850, A = b * t, mTip = 8;
       const sig = 6 * f * L / (b * t * t) / 1e6, delta = f * L ** 3 / (3 * E * I) * 1000, fos = 250 / sig;
       const k = 3 * E * I / L ** 3, mEff = mTip + 0.2357 * rho * A * L, fn = Math.sqrt(k / mEff) / (2 * Math.PI);
-      host.querySelector("#fe-read").innerHTML = `<div><span>Max bending stress</span><strong>${sig.toFixed(0)} MPa</strong></div><div><span>Factor of safety</span><strong class="${fos < 1.5 ? "bad" : "good"}">${fos.toFixed(2)}</strong></div><div><span>Tip deflection</span><strong>${delta.toFixed(2)} mm</strong></div><div><span>First natural frequency</span><strong>${fn.toFixed(0)} Hz</strong></div><div><span>Clear of 50 Hz excitation</span><strong class="${fn > 2 * 50 ? "good" : "bad"}">${fn > 100 ? "Yes" : "No"}</strong></div>`;
+      host.querySelector("#fe-read").innerHTML = `<div><span>Max bending stress</span><strong>${sig.toFixed(0)} MPa</strong></div><div><span>Factor of safety</span><strong class="${fos < 1.5 ? "bad" : "good"}">${fos.toFixed(2)}</strong></div><div><span>Tip deflection</span><strong>${delta.toFixed(2)} mm</strong></div><div><span>First natural frequency</span><strong>${fn.toFixed(0)} Hz</strong></div><div><span>Clear of 25 Hz excitation</span><strong class="${fn > 2 * 25 ? "good" : "bad"}">${fn > 50 ? "Yes" : "No"}</strong></div>`;
       const paper = css("--paper"), ink = css("--ink"), teal = css("--teal");
       ctx.fillStyle = paper; ctx.fillRect(0, 0, 520, 240);
       const x0 = 70, len = (L * 1000) * 2.2, hgt = Math.max(8, t * 1000 * 3), y0 = 110;
@@ -279,10 +279,10 @@
     host.innerHTML = `<div class="demo-bar"><strong class="demo-title">Cooling explorer</strong><span class="spacer"></span>
       <div class="seg" role="group" aria-label="Vent layout">${Object.entries(layouts).map(([k, v]) => `<button type="button" class="chip" data-k="${k}" aria-pressed="${k === "rec"}">${v.name}</button>`).join("")}</div></div>
       <div class="pg-stage" id="cf-stage"></div>
-      <div class="ctl-row">${slider("cf-fan", "Fan speed", 20, 100, 5, 70, " %")}${slider("cf-q", "Heat sink load", 5, 40, 1, 25, " W")}
+      <div class="ctl-row">${slider("cf-fan", "Fan speed", 20, 100, 5, 70, " %")}${slider("cf-q", "Processor load", 5, 40, 1, 30, " W")}
       <label class="ctl check"><input type="checkbox" id="cf-vec" checked> <span>Show airflow</span></label></div>
       <div class="mm-read wide" id="cf-read"></div>
-      <p class="demo-note">A small live solver running in your browser: a potential flow field from the inlet fan to the vents, then heat convection and diffusion from the heat sink and power supply. Pick a vent layout and watch the field settle.</p>`;
+      <p class="demo-note">A small live solver running in your browser: a potential flow field from the inlet fan to the vents, then heat convection and diffusion from the processor module and power supply. Pick a vent layout and watch the field settle.</p>`;
     const { c, ctx } = canvas(host.querySelector("#cf-stage"), 540, 300, "Temperature and airflow field");
     const fan = bindOut(host, "cf-fan", " %"), q = bindOut(host, "cf-q", " W"), vec = host.querySelector("#cf-vec");
     const solid = new Uint8Array(NX * NY), src = new Float32Array(NX * NY);
@@ -343,9 +343,9 @@
       if (vec.checked) { ctx.strokeStyle = "rgba(255,255,255,.75)"; ctx.lineWidth = 1.2;
         for (let y = 2; y < NY; y += 4) for (let x = 2; x < NX; x += 5) { const i = id(x, y); if (solid[i]) continue; const X = 20 + x * sx, Y = 20 + y * sy, L = 14 * Math.min(1, Math.hypot(u[i], v[i]) * 3) * (+fan.value / 100);
           const a = Math.atan2(v[i], u[i]); ctx.beginPath(); ctx.moveTo(X, Y); ctx.lineTo(X + Math.cos(a) * L, Y + Math.sin(a) * L); ctx.stroke(); } }
-      ctx.fillStyle = "#fff"; ctx.font = "600 11px sans-serif"; ctx.textAlign = "left"; ctx.fillText("Inlet fan", 26, 20 + 11 * sy); ctx.fillText("Heat sink", 20 + 26 * sx, 20 + 25 * sy); ctx.fillText("PSU", 20 + 55 * sx, 20 + 23 * sy);
+      ctx.fillStyle = "#fff"; ctx.font = "600 11px sans-serif"; ctx.textAlign = "left"; ctx.fillText("Inlet fan", 26, 20 + 11 * sy); ctx.fillText("Processor", 20 + 26 * sx, 20 + 25 * sy); ctx.fillText("PSU", 20 + 55 * sx, 20 + 23 * sy);
       const px = 20 + (peakI % NX) * sx, py = 20 + Math.floor(peakI / NX) * sy; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(px, py, 7, 0, 7); ctx.stroke(); ctx.lineWidth = 1;
-      if (++frameN % 10 === 0) { const tC = 24 + peak * 1.2; host.querySelector("#cf-read").innerHTML = `<div><span>Layout</span><strong>${layouts[lay].name}</strong></div><div><span>Peak temperature, live</span><strong>${tC.toFixed(0)} °C</strong></div><div><span>Ambient</span><strong>24 °C</strong></div><div><span>Hot spot</span><strong>${(peakI % NX) > 50 ? "Power supply" : "Heat sink"}</strong></div>`; }
+      if (++frameN % 10 === 0) { const tC = 25 + peak * 1.2; host.querySelector("#cf-read").innerHTML = `<div><span>Layout</span><strong>${layouts[lay].name}</strong></div><div><span>Peak temperature, live</span><strong>${tC.toFixed(0)} °C</strong></div><div><span>Inlet air</span><strong>25 °C</strong></div><div><span>Hot spot</span><strong>${(peakI % NX) > 50 ? "Power supply" : "Processor"}</strong></div>`; }
     });
     return stop;
   };
@@ -355,7 +355,7 @@
     host.innerHTML = `<div class="demo-bar"><strong class="demo-title">Obstacle avoidance sim</strong><span class="pill" id="tb-state">Forward</span><span class="spacer"></span>
       <button class="btn small" type="button" id="tb-pause">Pause</button><button class="btn small" type="button" id="tb-reset">Reset world</button></div>
       <div class="tb-wrap"><div class="pg-stage" id="tb-stage"></div><div class="tb-side"><div id="tb-polar"></div><div class="mm-read col" id="tb-read"></div></div></div>
-      <div class="ctl-row">${slider("tb-th", "Safety distance", 0.2, 0.6, 0.01, 0.35, " m")}${slider("tb-v", "Forward speed", 0.05, 0.22, 0.01, 0.15, " m/s")}
+      <div class="ctl-row">${slider("tb-th", "Safety distance", 0.2, 0.6, 0.01, 0.30, " m")}${slider("tb-v", "Forward speed", 0.05, 0.22, 0.01, 0.15, " m/s")}
       <label class="ctl check"><input type="checkbox" id="tb-rays" checked> <span>Show LiDAR rays</span></label></div>
       <p class="demo-note">Click anywhere in the world to drop a box, click a box to remove it. The same front, left, and right sector logic as my ROS 2 node runs here on a simulated 360 degree scan.</p>`;
     const { c, ctx } = canvas(host.querySelector("#tb-stage"), 480, 320, "Robot world, click to add obstacles");
@@ -420,13 +420,13 @@
 
   /* ================= Rock CT viewer ================= */
   D["rock-imaging"] = host => {
-    const N = 96, cores = [{ id: "R-01", seed: 3, n: 160 }, { id: "R-03", seed: 11, n: 230 }, { id: "R-06", seed: 29, n: 300 }];
+    const N = 96, cores = [{ id: "RC-01", seed: 3, n: 160 }, { id: "RC-02", seed: 11, n: 230 }, { id: "RC-03", seed: 29, n: 300 }];
     host.innerHTML = `<div class="demo-bar"><strong class="demo-title">CT slice viewer</strong><span class="spacer"></span>
       <div class="seg" role="group" aria-label="Sample">${cores.map((c, i) => `<button type="button" class="chip" data-i="${i}" aria-pressed="${i === 1}">${c.id}</button>`).join("")}</div></div>
       <div class="ri-wrap"><div class="pg-stage" id="ri-stage"></div><div class="ri-side"><div class="mm-read col" id="ri-read"></div>
       <label class="ctl check"><input type="checkbox" id="ri-ov" checked> <span>Segmentation overlay</span></label></div></div>
       <div class="ctl-row">${slider("ri-z", "Slice", 1, N, 1, 48)}${slider("ri-th", "Pore threshold", 40, 140, 1, 92)}</div>
-      <p class="demo-note">Scroll through the stack and move the threshold. The pore phase is segmented live and porosity is measured for this slice and for the whole stack at 25 µm voxels.</p>`;
+      <p class="demo-note">Scroll through the stack and move the threshold. The pore phase is segmented live and porosity is measured for this slice and for the whole stack at 20 µm voxels.</p>`;
     const { c, ctx } = canvas(host.querySelector("#ri-stage"), 300, 300, "CT slice with pore segmentation");
     const z = bindOut(host, "ri-z"), thr = bindOut(host, "ri-th"), ov = host.querySelector("#ri-ov");
     let vol, cur = 1;
@@ -448,10 +448,10 @@
       const off = document.createElement("canvas"); off.width = N; off.height = N; off.getContext("2d").putImageData(img, 0, 0);
       ctx.clearRect(0, 0, 300, 300); ctx.imageSmoothingEnabled = false; ctx.drawImage(off, 6, 6, 288, 288);
       ctx.strokeStyle = css("--ink"); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(150, 150, 144, 0, 7); ctx.stroke();
-      ctx.fillStyle = css("--ink"); ctx.fillRect(14, 286, 60, 3); ctx.font = "10px sans-serif"; ctx.fillText("0.75 mm", 14, 282);
+      ctx.fillStyle = css("--ink"); ctx.fillRect(14, 286, 60, 3); ctx.font = "10px sans-serif"; ctx.fillText("0.4 mm", 14, 282);
       let vp = 0, vt = 0; for (let k = 0; k < N; k += 4) for (let i = 0; i < N * N; i += 3) { if (!inside(i % N, i / N | 0)) continue; vt++; if (vol[k * N * N + i] < T) vp++; }
-      const vox = 0.025 ** 3, bulk = vt * 12 * vox;
-      host.querySelector("#ri-read").innerHTML = `<div><span>Sample</span><strong>${cores[cur].id}</strong></div><div><span>Slice</span><strong>${zz + 1} of ${N}</strong></div><div><span>Slice porosity</span><strong>${(pore / tot * 100).toFixed(1)} %</strong></div><div><span>Stack porosity</span><strong>${(vp / vt * 100).toFixed(1)} %</strong></div><div><span>Voxel</span><strong>25 µm</strong></div>`;
+      const vox = 0.02 ** 3, bulk = vt * 12 * vox;
+      host.querySelector("#ri-read").innerHTML = `<div><span>Sample</span><strong>${cores[cur].id}</strong></div><div><span>Slice</span><strong>${zz + 1} of ${N}</strong></div><div><span>Slice porosity</span><strong>${(pore / tot * 100).toFixed(1)} %</strong></div><div><span>Stack porosity</span><strong>${(vp / vt * 100).toFixed(1)} %</strong></div><div><span>Voxel</span><strong>20 µm</strong></div>`;
     }
     host.querySelectorAll(".seg .chip").forEach(b => b.addEventListener("click", () => { cur = +b.dataset.i; host.querySelectorAll(".seg .chip").forEach(x => x.setAttribute("aria-pressed", String(x === b))); build(cores[cur]); draw(); }));
     [z, thr].forEach(i => i.addEventListener("input", draw)); ov.addEventListener("change", draw);

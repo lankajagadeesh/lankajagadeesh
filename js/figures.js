@@ -46,25 +46,25 @@
   F.mmDrawing = () => ({ title: "Bracket drawing", caption: "Front view of the slotted bracket with slot travel and hole positions.", svg: wrap(`
     <rect x="12" y="12" width="456" height="276" class="frame"/>
     <rect x="320" y="236" width="148" height="52" class="frame"/>
-    ${t(328,254,"BRACKET, SLOTTED","tx sm b")}${t(328,270,"S275 steel, 6 mm","tx sm")}${t(328,284,"Rev C   Scale 1:2","tx sm")}
+    ${t(328,254,"BRACKET, SLOTTED","tx sm b")}${t(328,270,"ASTM A36, 8 mm","tx sm")}${t(328,284,"Rev C   Scale 1:2","tx sm")}
     <path d="M90 220 L90 70 L250 70 L250 220 Z" class="pt"/>
     <rect x="120" y="150" width="100" height="20" rx="10" class="slot"/>
     <circle cx="130" cy="100" r="8" class="slot"/><circle cx="210" cy="100" r="8" class="slot"/>
     <line x1="120" y1="190" x2="220" y2="190" class="dim"/>
     <line x1="120" y1="172" x2="120" y2="196" class="ln thin"/><line x1="220" y1="172" x2="220" y2="196" class="ln thin"/>
     ${t(170,206,"100 (slot length)","tx sm","middle")}
-    <line x1="130" y1="160" x2="210" y2="160" class="dim ac-stroke"/>${t(170,144,"travel 20","tx sm ac","middle")}
+    <line x1="130" y1="160" x2="210" y2="160" class="dim ac-stroke"/>${t(170,144,"travel 30","tx sm ac","middle")}
     <line x1="90" y1="240" x2="250" y2="240" class="dim"/>${t(170,256,"160","tx sm","middle")}
     <line x1="270" y1="70" x2="270" y2="220" class="dim"/>${t(278,150,"150","tx sm")}
     ${t(140,90,"2× Ø9 THRU","tx sm")}${t(30,40,"±0.1 on mating features","tx sm")}`, "Dimensioned bracket drawing") });
 
   F.mmBom = () => {
-    const rows = [["1","MM-100","Base plate","S275, 10 mm","1"],["2","MM-110","Bracket, slotted","S275, 6 mm","2"],["3","MM-120","Spacer","Al 6061","4"],["4","MM-130","Cover","Polycarbonate","1"],["5","ISO 4762","Socket cap screw M8×30","8.8 zinc","8"],["6","ISO 7089","Washer M8","Steel","8"]];
+    const rows = [["1","MM-100","Base plate","A36, 10 mm","1"],["2","MM-110","Bracket, slotted","A36, 8 mm","2"],["3","MM-120","Spacer","Al 6061","4"],["4","MM-130","Cover","Polycarbonate","1"],["5","ISO 4762","Socket cap screw M8×30","8.8 zinc","8"],["6","ISO 7089","Washer M8","Steel","8"]];
     const xs=[24,58,138,320,440];
     let s = `<rect x="16" y="20" width="448" height="30" class="ac-soft"/>`;
     ["Item","Part no.","Description","Material","Qty"].forEach((h,i)=>{ s += t(xs[i]+(i===4?8:0), 40, h, "tx sm b"); });
     rows.forEach((r,j)=>{ const y = 76 + j*34; s += `<line x1="16" y1="${y+12}" x2="464" y2="${y+12}" class="ln thin"/>`; r.forEach((c,i)=>{ s += t(xs[i]+(i===4?8:0), y, c, "tx sm"); }); });
-    return { title: "Bill of materials extract", caption: "First six of 14 line items with materials and quantities.", svg: wrap(s, "Bill of materials table") };
+    return { title: "Bill of materials extract", caption: "First six of 12 line items with materials and quantities.", svg: wrap(s, "Bill of materials table") };
   };
 
   /* ---------- Bracket FEA ---------- */
@@ -85,7 +85,7 @@
       <defs><clipPath id="bk1"><path d="${bracketPath}"/></clipPath></defs>
       <path d="${bracketPath}" class="pt"/><g clip-path="url(#bk1)">${tris}</g><path d="${bracketPath}" class="ln" fill="none"/>
       <circle cx="130" cy="180" r="14" class="hole"/><circle cx="350" cy="85" r="11" class="hole"/>
-      ${t(300,170,"Elements: 48,612","tx sm")}${t(300,188,"Nodes: 81,940","tx sm")}${t(300,206,"Hole refinement: 0.5 mm","tx sm")}`, "Finite element mesh of bracket") };
+      ${t(300,170,"Elements: 48,000","tx sm")}${t(300,188,"Nodes: 72,000","tx sm")}${t(300,206,"Hole refinement: 0.5 mm","tx sm")}`, "Finite element mesh of bracket") };
   };
 
   F.feaBC = () => ({ title: "Boundary conditions", caption: "Fixed mounting face, bolt preload at both holes, and motor load on the top flange.", svg: wrap(`
@@ -94,9 +94,9 @@
     <line x1="70" y1="262" x2="250" y2="262" class="ln"/>${t(160,284,"Fixed support, mounting face","tx sm","middle")}
     <circle cx="130" cy="180" r="14" class="hole"/><circle cx="350" cy="85" r="11" class="hole"/>
     ${[260,300,340,380].map(x=>`<line x1="${x}" y1="18" x2="${x}" y2="54" class="arrow"/>`).join("")}
-    ${t(320,14,"F = 1.2 kN","tx sm ac","middle")}
-    <path d="M118 168 l24 24 M142 168 l-24 24" class="ln"/>${t(150,216,"Preload 18 kN","tx sm")}
-    ${t(280,150,"Frictional contact μ = 0.2","tx sm")}${t(280,168,"Steel, E = 210 GPa","tx sm")}`, "Boundary condition diagram") });
+    ${t(320,14,"F = 500 N","tx sm ac","middle")}
+    <path d="M118 168 l24 24 M142 168 l-24 24" class="ln"/>${t(150,216,"Preload 10 kN × 4","tx sm")}
+    ${t(280,150,"Frictional contact μ = 0.2","tx sm")}${t(280,168,"Belt load 150 N lateral","tx sm")}`, "Boundary condition diagram") });
 
   F.feaStress = () => {
     let cells = "";
@@ -105,23 +105,23 @@
       const v = Math.max(0, 1 - d1 / 120) * 0.95 + Math.max(0, 1 - d2 / 70) * 0.35;
       cells += `<rect x="${x}" y="${y}" width="8.5" height="8.5" fill="${heat(Math.min(1, v))}"/>`;
     }
-    return { title: "von Mises stress", caption: "Peak stress of 142 MPa at the inner fillet, factor of safety 1.76 against yield.", svg: wrap(`
+    return { title: "von Mises stress", caption: "Peak stress of 120 MPa at the inside fillet, factor of safety 2.08 against yield.", svg: wrap(`
       <defs><clipPath id="bk2"><path d="${bracketPath}"/></clipPath></defs>
       <g clip-path="url(#bk2)">${cells}</g><path d="${bracketPath}" class="ln" fill="none"/>
       <circle cx="130" cy="180" r="14" class="hole"/><circle cx="350" cy="85" r="11" class="hole"/>
-      <line x1="244" y1="114" x2="300" y2="170" class="ln"/>${t(304,180,"Max 142 MPa","tx sm b")}
-      ${legend(412, 120, 0, 142, "MPa")}`, "Stress contour plot") };
+      <line x1="244" y1="114" x2="300" y2="170" class="ln"/>${t(304,180,"Max 120 MPa","tx sm b")}
+      ${legend(412, 120, 0, 120, "MPa")}`, "Stress contour plot") };
   };
 
   F.feaConvergence = () => {
-    const pts = [[8000,118],[16000,131],[28000,138],[48612,142],[72000,143]];
-    const x = n => 60 + (n / 80000) * 380, y = v => 250 - ((v - 100) / 50) * 200;
+    const pts = [[8000,99],[16000,110],[28000,116],[48000,120],[72000,121]];
+    const x = n => 60 + (n / 80000) * 380, y = v => 250 - ((v - 80) / 50) * 200;
     let s = `<line x1="60" y1="250" x2="440" y2="250" class="ln"/><line x1="60" y1="50" x2="60" y2="250" class="ln"/>`;
-    [100,110,120,130,140,150].forEach(v=>{ s+= `<line x1="60" y1="${y(v)}" x2="440" y2="${y(v)}" class="grid"/>` + t(52,y(v)+4,v,"tx sm","end"); });
+    [80,90,100,110,120,130].forEach(v=>{ s+= `<line x1="60" y1="${y(v)}" x2="440" y2="${y(v)}" class="grid"/>` + t(52,y(v)+4,v,"tx sm","end"); });
     [0,20000,40000,60000,80000].forEach(n=>{ s+= t(x(n),268,(n/1000)+"k","tx sm","middle"); });
     s += `<polyline points="${pts.map(p=>x(p[0])+","+y(p[1])).join(" ")}" class="ac-stroke thick" fill="none"/>`;
     pts.forEach((p,i)=>{ s += `<circle cx="${x(p[0])}" cy="${y(p[1])}" r="${i===3?6:4}" class="${i===3?'ac-fill':'pt2'}"/>`; });
-    s += t(x(48612)+8, y(142)-12, "Selected mesh", "tx sm b") + t(250,288,"Elements","tx sm","middle") + t(16,40,"Peak stress, MPa","tx sm");
+    s += t(x(48000)+8, y(120)-12, "Selected mesh", "tx sm b") + t(250,288,"Elements","tx sm","middle") + t(16,40,"Peak stress, MPa","tx sm");
     return { title: "Mesh convergence", caption: "Peak stress changed by under 1 percent between the selected and the finest mesh.", svg: wrap(s, "Mesh convergence chart") };
   };
 
@@ -131,8 +131,8 @@
     <rect x="44" y="110" width="14" height="80" class="ac-fill"/>${t(48,100,"Inlet fan","tx sm")}
     ${[80,120,160,200].map(y=>`<rect x="428" y="${y}" width="10" height="22" class="slot"/>`).join("")}${t(436,70,"Outlet vents","tx sm","end")}
     <rect x="110" y="170" width="200" height="70" class="pt2"/>${t(120,232,"Main board","tx sm")}
-    <rect x="180" y="150" width="60" height="20" class="pt2"/>${t(184,144,"Heat sink, 25 W","tx sm")}
-    <rect x="330" y="160" width="70" height="80" class="pt2"/>${t(334,154,"PSU, 15 W","tx sm")}
+    <rect x="180" y="150" width="60" height="20" class="pt2"/>${t(184,144,"Processor, 30 W","tx sm")}
+    <rect x="330" y="160" width="70" height="80" class="pt2"/>${t(334,154,"PSU, 20 W","tx sm")}
     ${[["M70 130 C150 110 260 90 420 92"],["M70 150 C160 140 300 120 420 132"],["M70 170 C140 160 250 150 330 150 C360 150 400 190 420 212"]].map(p=>`<path d="${p}" class="flow"/>`).join("")}`, "Enclosure geometry") });
 
   F.cfdContour = () => {
@@ -141,21 +141,21 @@
       const v = 0.15 + Math.max(0, 1 - Math.hypot(x - 210, y - 170) / 120) * 0.75 + Math.max(0, 1 - Math.hypot(x - 365, y - 200) / 70) * 0.45 - Math.max(0, 1 - (x - 40) / 160) * 0.2;
       cells += `<rect x="${x}" y="${y}" width="10.5" height="10.5" fill="${heat(Math.max(0, Math.min(1, v)))}"/>`;
     }
-    return { title: "Temperature contour, recommended layout", caption: "Mid plane temperature with the recommended vent layout. Peak component temperature 58 °C.", svg: wrap(`
+    return { title: "Temperature contour, recommended layout", caption: "Mid plane temperature with the recommended vent layout. Peak component temperature 65 °C.", svg: wrap(`
       ${cells.replace(/x="(\d+)"/g,(m,v)=>`x="${(v-40)*0.88+20}"`).replace(/width="10.5"/g,'width="9.4"')}
       <rect x="20" y="40" width="352" height="220" class="ln" fill="none"/>
-      <rect x="142" y="150" width="53" height="20" fill="none" class="ln"/>${t(168,142,"58 °C","tx sm b inv","middle")}
-      ${legend(392, 60, 24, 58, "°C")}`, "Temperature contour") };
+      <rect x="142" y="150" width="53" height="20" fill="none" class="ln"/>${t(168,142,"65 °C","tx sm b inv","middle")}
+      ${legend(392, 60, 25, 65, "°C")}`, "Temperature contour") };
   };
 
   F.cfdCompare = () => {
-    const d = [["Baseline", 71], ["Top vents", 66], ["Side vents", 62], ["Recommended", 58]];
+    const d = [["Baseline", 78], ["Recommended", 65]];
     const x0 = 140, sc = v => (v / 80) * 300;
     let s = "";
     [0,20,40,60,80].forEach(v=>{ s += `<line x1="${x0+sc(v)}" y1="30" x2="${x0+sc(v)}" y2="250" class="grid"/>` + t(x0+sc(v),268,v,"tx sm","middle"); });
-    d.forEach((r,i)=>{ const y = 50 + i*50; s += t(130, y+20, r[0], "tx sm", "end") + `<rect x="${x0}" y="${y}" width="${sc(r[1])}" height="28" class="${i===3?'ac-fill':'pt2'}"/>` + t(x0+sc(r[1])+6, y+19, r[1]+" °C", "tx sm b"); });
+    d.forEach((r,i)=>{ const y = 90 + i*70; s += t(130, y+20, r[0], "tx sm", "end") + `<rect x="${x0}" y="${y}" width="${sc(r[1])}" height="28" class="${i===1?'ac-fill':'pt2'}"/>` + t(x0+sc(r[1])+6, y+19, r[1]+" °C", "tx sm b"); });
     s += t(x0+150, 290, "Peak component temperature, °C", "tx sm", "middle");
-    return { title: "Vent layout comparison", caption: "Four layouts at the same inlet flow. The recommended layout lowers the peak by 13 °C.", svg: wrap(s, "Bar chart comparing vent layouts") };
+    return { title: "Vent layout comparison", caption: "Same 60 W load and 12 L/s inlet flow. The recommended layout lowers the peak by 13 °C and pressure drop from 48 to 32 Pa.", svg: wrap(s, "Bar chart comparing vent layouts") };
   };
 
   /* ---------- TurtleBot ---------- */
@@ -183,13 +183,13 @@
       if (a > 340 || a < 20) d = 52 + r() * 3; if (a > 60 && a < 100) d = 80 + r() * 3; if (a > 200 && a < 240) d = 95;
       pts += `<circle cx="${cx + d * Math.cos(rad - Math.PI/2)}" cy="${cy + d * Math.sin(rad - Math.PI/2)}" r="2.2" class="ac-fill"/>`;
     }
-    return { title: "LiDAR scan and sectors", caption: "One 360 degree scan split into front, left, and right sectors. The front sector is below the 0.35 m threshold.", svg: wrap(`
+    return { title: "LiDAR scan and sectors", caption: "One 360 degree scan split into front, left, and right sectors. The front sector is below the 0.30 m threshold.", svg: wrap(`
       ${[40,80,120].map(r=>`<circle cx="${cx}" cy="${cy}" r="${r}" class="grid" fill="none"/>`).join("")}
       <path d="M${cx} ${cy} L${cx-40} ${cy-110} A118 118 0 0 1 ${cx+40} ${cy-110} Z" class="warn-fill"/>
       <circle cx="${cx}" cy="${cy}" r="62" class="ln dash" fill="none"/>
       ${pts}<circle cx="${cx}" cy="${cy}" r="10" class="pt2"/>
-      ${t(330,60,"Front sector ±20°","tx sm b")}${t(330,80,"Nearest 0.31 m","tx sm")}${t(330,100,"Action: turn left","tx sm")}
-      ${t(330,140,"Dashed ring 0.35 m","tx sm")}${t(330,160,"Grid 0.25 m","tx sm")}`, "LiDAR polar scan") };
+      ${t(330,60,"Front sector ±20°","tx sm b")}${t(330,80,"Below threshold","tx sm")}${t(330,100,"Action: turn left","tx sm")}
+      ${t(330,140,"Dashed ring 0.30 m","tx sm")}${t(330,160,"Grid 0.25 m","tx sm")}`, "LiDAR polar scan") };
   };
 
   /* ---------- Puzzle game ---------- */
@@ -205,7 +205,7 @@
       if(c==='E') s += `<rect x="${x+6}" y="${y+6}" width="22" height="22" class="ln" fill="none"/>` + t(x+17,y+22,"E","tx sm b","middle");
     }));
     s += t(70,286,"P player   C crate   S switch   D door   E exit","tx sm mono");
-    return { title: "Level 7 layout", caption: "Push both crates onto the switches to open the door to the exit.", svg: wrap(s, "Puzzle level grid") };
+    return { title: "Level 4 layout", caption: "Push both crates onto the switches to open the door to the exit.", svg: wrap(s, "Puzzle level grid") };
   };
 
   F.pgStates = () => {
@@ -232,7 +232,7 @@
       [[3,5],[4,5],...leg].forEach(([i,j])=>{ s += `<rect x="${bx+i*px}" y="${by+j*px}" width="${px}" height="${px}" fill="${pal[0]}"/>`; });
       s += `<rect x="${bx+3*px}" y="${by+px}" width="4" height="4" fill="${pal[0]}"/>` + t(ox+4, oy+sz*2-6, "f"+(f+1), "tx sm mono");
     }
-    return { title: "Walk cycle sprite sheet", caption: "Eight frames at 32 × 32 px, played at 12 fps.", svg: wrap(s, "Sprite sheet frames") };
+    return { title: "Walk cycle sprite sheet", caption: "Eight frames per direction at 64 × 64 px, played at 12 fps.", svg: wrap(s, "Sprite sheet frames") };
   };
 
   F.gaIcons = () => {
@@ -251,7 +251,7 @@
   F.gaPalette = () => {
     let s = ""; pal.forEach((c,i)=>{ const x = 30 + (i%8)*54, y = 40 + Math.floor(i/8)*110;
       s += `<rect x="${x}" y="${y}" width="46" height="60" rx="4" fill="${c}" class="sw"/>` + t(x+23, y+78, c.slice(1).toUpperCase(), "tx sm mono", "middle"); });
-    return { title: "Project palette", caption: "The 16 colour palette used across every sprite and environment painting.", svg: wrap(s, "Colour palette") };
+    return { title: "Project palette", caption: "16 of the 32 palette entries used across every sprite and environment painting.", svg: wrap(s, "Colour palette") };
   };
 
   /* ---------- Product video ---------- */
@@ -280,26 +280,26 @@
     let p = ""; for (let i = 0; i < 60; i++) { const a = r()*6.28, d = Math.sqrt(r())*110, x = 170+d*Math.cos(a), y = 150+d*Math.sin(a), rr = 2+r()*7; p += `<ellipse cx="${x}" cy="${y}" rx="${rr}" ry="${rr*(.5+r()*.6)}" transform="rotate(${r()*180} ${x} ${y})" class="pore"/>`; }
     s += `<g clip-path="url(#core)">${g}${p}</g><circle cx="170" cy="150" r="120" class="ln" fill="none"/>`;
     s += `<rect x="330" y="70" width="16" height="16" class="pore"/>${t(354,83,"Pore phase","tx sm")}<rect x="330" y="100" width="16" height="16" class="ct"/>${t(354,113,"Solid phase","tx sm")}`;
-    s += t(330,150,"Sample R-03, slice 412","tx sm b") + t(330,170,"Voxel 25 µm isotropic","tx sm") + t(330,190,"Porosity 14.2 %","tx sm");
+    s += t(330,150,"Sample RC-02, slice 250","tx sm b") + t(330,170,"Voxel 20 µm isotropic","tx sm") + t(330,190,"Porosity 14.2 %","tx sm");
     s += `<line x1="60" y1="285" x2="140" y2="285" class="ln thick"/>` + t(100,278,"2 mm","tx sm","middle");
-    return { title: "CT slice with segmentation overlay", caption: "Pore phase highlighted over the greyscale CT slice of sample R-03.", svg: wrap(s, "CT slice segmentation") };
+    return { title: "CT slice with segmentation overlay", caption: "Pore phase highlighted over the greyscale CT slice of sample RC-02.", svg: wrap(s, "CT slice segmentation") };
   };
 
   F.riMap = () => {
-    const sites = [["R-01",120,90,11.6],["R-02",170,130,13.1],["R-03",250,110,14.2],["R-04",300,180,15.9],["R-05",210,220,16.4],["R-06",360,90,17.8]];
+    const sites = [["RC-01",150,110,10.8],["RC-02",260,170,14.2],["RC-03",350,90,17.6]];
     let s = `<rect x="30" y="20" width="420" height="250" class="pt"/>`;
     s += `<path d="M30 200 C120 170 180 260 300 230 S420 150 450 170" class="water"/><path d="M60 20 C90 100 60 160 120 270" class="grid" fill="none"/>`;
     [100,170,240,310,380].forEach(x=> s+= `<line x1="${x}" y1="20" x2="${x}" y2="270" class="grid"/>`); [80,140,200,260].forEach(y=> s+=`<line x1="30" y1="${y}" x2="450" y2="${y}" class="grid"/>`);
-    sites.forEach(([id,x,y,p])=>{ const rr = 5 + (p-11)*1.3; s += `<circle cx="${x}" cy="${y}" r="${rr}" class="ac-fill site"/>` + t(x+rr+4, y+4, `${id}  ${p}%`, "tx sm b"); });
+    sites.forEach(([id,x,y,p])=>{ const rr = 6 + (p-10)*1.4; s += `<circle cx="${x}" cy="${y}" r="${rr}" class="ac-fill site"/>` + t(x+rr+4, y+4, `${id}  ${p}%`, "tx sm b"); });
     s += t(440,262,"WGS 84","tx sm mono","end") + `<path d="M420 40 l8 20 l-8 -6 l-8 6 Z" class="ink-fill"/>` + t(420,74,"N","tx sm b","middle");
     s += t(40,290,"Marker size scales with porosity","tx sm");
-    return { title: "Sampling location map", caption: "Six collection sites joined to their porosity measurements by sample identifier.", svg: wrap(s, "Sampling map") };
+    return { title: "Sampling location map", caption: "Three collection sites joined to their porosity measurements by sample identifier.", svg: wrap(s, "Sampling map") };
   };
 
   F.riTable = () => {
-    const rows = [["R-01","1.82","3.31","11.6"],["R-02","1.79","3.47","13.1"],["R-03","1.85","3.88","14.2"],["R-04","1.80","4.25","15.9"],["R-05","1.83","4.47","16.4"],["R-06","1.81","4.77","17.8"]];
+    const rows = [["RC-01","1,000","108","10.8"],["RC-02","1,000","142","14.2"],["RC-03","1,000","176","17.6"]];
     const xs = [30,140,270,390]; let s = `<rect x="16" y="20" width="448" height="30" class="ac-soft"/>`;
-    ["Sample","Bulk volume, cm³","Pore volume, cm³","Porosity, %"].forEach((h,i)=> s += t(xs[i],40,h,"tx sm b"));
+    ["Sample","Bulk volume, mm³","Pore volume, mm³","Porosity, %"].forEach((h,i)=> s += t(xs[i],40,h,"tx sm b"));
     rows.forEach((r,j)=>{ const y = 76 + j*34; s += `<line x1="16" y1="${y+12}" x2="464" y2="${y+12}" class="ln thin"/>`; r.forEach((c,i)=> s += t(xs[i], y, c, "tx sm mono")); });
     return { title: "Measurement table", caption: "Bulk and pore volume per sample from the 3D Slicer segmentation.", svg: wrap(s, "Measurement table") };
   };

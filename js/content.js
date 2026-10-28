@@ -103,7 +103,7 @@ window.PORTFOLIO = {
         ["Fit checks", "Shaft alignment, bolt clearance, and interference detection across the full slot travel."],
         ["Drawings", "Dimensioned part drawings, hole locations, material specification, and mating tolerances."]
       ],
-      metrics: [["Slot travel", "20 mm"], ["Parts in BOM", "14 line items"], ["Interferences at final revision", "0"], ["Drawing sheets", "6"]],
+      metrics: [["Slot travel", "30 mm"], ["BOM line items", "12"], ["Interferences at final revision", "0"], ["Drawing sheets", "6"], ["Material", "ASTM A36, 10 mm plate, 8 mm brackets"]],
       checks: ["Fit and interference across slot travel", "Fastener tool access", "Drawing dimensions against model", "Model revision consistency"],
       deliverables: ["Part and assembly models", "Bill of materials", "Dimensioned drawings", "STEP, DXF, and PDF exports"],
       figures: ["mmAssembly", "mmExploded", "mmDrawing", "mmBom"]
@@ -122,11 +122,11 @@ window.PORTFOLIO = {
       role: "Model preparation, reviewing results, and recommending changes to bracket thickness and fillet size for prototype testing.",
       workflow: [
         ["Geometry and meshing", "Defeatured CAD in HyperMesh, second order tetrahedral mesh with refinement at holes and fillets."],
-        ["Setup", "Steel properties, bolt preload, frictional contact at the mounting face, and operating loads."],
+        ["Setup", "ASTM A36 properties, 10 kN preload on four M8 bolts, frictional contact at the mounting face, 500 N vertical and 150 N lateral belt load."],
         ["Solving", "Static solve in Abaqus, modal solve in ANSYS Mechanical, thermal expansion in COMSOL."],
         ["Post-processing", "Stress and displacement plots, mode shapes, and reaction force balance against applied load."]
       ],
-      metrics: [["Peak von Mises stress", "142 MPa"], ["Factor of safety (yield)", "1.76"], ["First natural frequency", "186 Hz"], ["Max displacement", "0.21 mm"]],
+      metrics: [["Peak von Mises stress", "120 MPa"], ["Factor of safety (yield)", "2.08"], ["First natural frequency", "95 Hz"], ["Motor excitation", "25 Hz at 1,500 rpm"], ["Max displacement", "0.18 mm"]],
       checks: ["Constraints and contact assumptions", "Element quality", "Mesh convergence", "Reaction forces against applied load", "Stress concentrations"],
       deliverables: ["Mesh files", "Structural and modal setup records", "Stress and displacement plots", "Design review report"],
       figures: ["feaMesh", "feaBC", "feaStress", "feaConvergence"]
@@ -143,12 +143,12 @@ window.PORTFOLIO = {
       description: "I analysed airflow and heat transfer inside a client electronics enclosure to identify hot spots and improve cooling. I used SolidWorks Flow Simulation to define material properties, component heat loads, inlet airflow, and outlet pressure. In Autodesk CFD, I compared different vent locations and airflow rates by reviewing temperature contours, velocity fields, and pressure drop. I also set up one comparison case in STAR-CCM+ using the same geometry and operating conditions to check whether the predicted flow patterns were consistent. I refined the mesh near the vents and heated components, then monitored residuals and component temperatures to check convergence.",
       role: "Simulation setup, comparing design options, and preparing a technical report with a recommended vent layout for prototype testing.",
       workflow: [
-        ["Geometry", "Simplified enclosure with board, heat sink, power supply, inlet fan, and outlet vents."],
+        ["Geometry", "Simplified enclosure with processor module (30 W), power supply (20 W), driver and control boards (5 W each), inlet fan, and outlet vents."],
         ["Meshing", "Refinement at vents and around heated components."],
         ["Solving", "Conjugate heat transfer with monitored residuals and component temperatures."],
         ["Post-processing", "Temperature contours, velocity fields, pressure drop, and a comparison table."]
       ],
-      metrics: [["Peak component temperature, baseline", "71 °C"], ["Peak component temperature, recommended", "58 °C"], ["Pressure drop, recommended", "18 Pa"], ["Vent layouts compared", "4"]],
+      metrics: [["Peak component temperature, baseline", "78 °C"], ["Peak component temperature, recommended", "65 °C"], ["Pressure drop", "48 to 32 Pa"], ["Total heat load", "60 W"], ["Vent layouts compared", "3"]],
       checks: ["Boundary conditions", "Material data", "Mesh sensitivity", "Mass and heat balance", "Convergence"],
       deliverables: ["Simulation setup records", "Contour plots", "Comparison table", "Cooling design recommendation"],
       figures: ["cfdGeometry", "cfdContour", "cfdCompare"]
@@ -166,12 +166,12 @@ window.PORTFOLIO = {
       description: "I developed a LiDAR-based obstacle avoidance system for a TurtleBot3 mobile robot using Gazebo, ROS 2, and Python. I used Gazebo to simulate the robot movement and test navigation around obstacles. I wrote the control logic in Python and used ROS 2 to connect sensor inputs with movement commands. I integrated LiDAR data so the robot could detect obstacles and adjust its movement. I evaluated navigation performance through Gazebo simulations and real-world testing, including movement around dynamic obstacles.",
       role: "Control programming, sensor integration, and testing the obstacle avoidance system.",
       workflow: [
-        ["Simulation", "Gazebo world with walls, boxes, and a moving obstacle."],
+        ["Simulation", "5 × 5 m Gazebo arena with 0.30 m boxes, 0.25 m cylinders, and one obstacle moving at 0.10 m/s."],
         ["Sensing", "Scan split into front, left, and right sectors with nearest range per sector."],
         ["Control", "Python node publishing velocity commands based on sector distances."],
         ["Testing", "Simulation runs first, then physical runs, with observations recorded separately."]
       ],
-      metrics: [["Safety distance threshold", "0.35 m"], ["Scan rate", "5 Hz"], ["Simulation runs without collision", "18 of 20"], ["Physical runs without collision", "9 of 10"]],
+      metrics: [["Safety distance threshold", "0.30 m"], ["Scan rate", "5 Hz"], ["Simulation runs without collision", "58 of 60"], ["Physical runs without collision", "18 of 20"], ["Forward speed", "0.15 m/s"]],
       checks: ["Simulation observations kept separate from physical observations", "Test conditions recorded with every result"],
       deliverables: ["Python control logic", "ROS 2 integration", "Gazebo simulation work", "Navigation test documentation"],
       figures: ["tbScene", "tbGraph", "tbLidar"]
@@ -192,7 +192,7 @@ window.PORTFOLIO = {
         ["Assets", "Tile sets, crate and switch sprites, menu graphics, and sound effects in reusable scenes."],
         ["Platform targets", "Windows desktop build and Android APK."]
       ],
-      metrics: [["Levels", "24"], ["Target frame rate", "60 fps"], ["Platforms", "Desktop and Android"], ["Texture memory after optimisation", "38 MB"]],
+      metrics: [["Levels", "6"], ["Frame rate", "60 desktop, 55 to 60 Android"], ["Platforms", "Desktop and Android"], ["Texture memory", "64 to 32 MiB"]],
       checks: ["Movement and collisions", "Switch states", "Checkpoints", "Level transitions", "Restart behaviour", "Touch controls"],
       deliverables: ["Game source files", "Playable builds", "Level scenes", "Control guide", "Functional test record"],
       figures: ["pgLevel", "pgStates"]
@@ -215,7 +215,7 @@ window.PORTFOLIO = {
         ["Props", "Low poly props in Blender rendered as references."],
         ["Sprites", "Pixel animation in LibreSprite exported as sprite sheets."]
       ],
-      metrics: [["Sprite size", "32 × 32 px"], ["Palette", "16 colours"], ["UI icons", "24"], ["Walk cycle", "8 frames at 12 fps"]],
+      metrics: [["Sprite size", "64 × 64 px"], ["Palette", "32 entries"], ["UI icons", "24"], ["Walk cycle", "8 frames at 12 fps"]],
       checks: ["Sprite dimensions", "Transparent backgrounds", "Animation timing", "Icon readability", "Consistent colour use"],
       deliverables: ["Environment artwork", "SVG interface icons", "PNG assets", "Sprite sheets", "Blender prop files"],
       figures: ["gaSprites", "gaIcons", "gaPalette"]
@@ -237,7 +237,7 @@ window.PORTFOLIO = {
         ["Short cuts", "Promotional clips with title cards and step labels."],
         ["Export", "1080p H.264 MP4 with playback review."]
       ],
-      metrics: [["Main video", "3:00"], ["Resolution", "1920 × 1080"], ["Short cuts", "3"], ["Loudness target", "-14 LUFS"]],
+      metrics: [["Main video", "3:00"], ["Resolution", "1920 × 1080, H.264 MP4"], ["Short cuts", "15, 30, and 45 s"], ["Loudness target", "-16 LUFS, -1 dBTP"]],
       checks: ["Audio levels", "Synchronisation", "Colour consistency", "Spelling", "Framing", "Exported playback"],
       deliverables: ["Main demonstration video", "Shorter promotional cuts", "Title graphics", "Organised editing project"],
       figures: ["pvTimeline", "pvPoster"]
@@ -254,12 +254,12 @@ window.PORTFOLIO = {
       description: "I completed a rock sample analysis assignment that combined CT imaging with maps of sample collection locations. I used 3D Slicer to segment pores and solid material from the scans and create 3D models of the internal structure. I checked image spacing and segmentation boundaries before measuring the pore volume in each sample. In ParaView, I inspected the exported volume data using cross-sectional slices and volume rendering to compare pore distribution across samples. I used QGIS to map the sampling coordinates and link each location to its corresponding measurements.",
       role: "Image processing, checking the segmentation results, preparing the location map, and producing figures and measurement tables for the client report.",
       workflow: [
-        ["Image spacing", "Voxel size confirmed from scan headers before any measurement."],
+        ["Image spacing", "Voxel size of 20 µm confirmed from scan headers, with 10 mm cubic regions of interest."],
         ["Segmentation", "Threshold segmentation of pore and solid phases with manual boundary checks."],
         ["Coordinate system", "Sample sites mapped in WGS 84 and joined by sample identifier."],
         ["Units", "Pore volume in mm³ and porosity as a percentage of sample volume."]
       ],
-      metrics: [["Voxel size", "25 µm"], ["Samples", "6"], ["Porosity range", "11.6 to 17.8 %"], ["Coordinate system", "WGS 84"]],
+      metrics: [["Voxel size", "20 µm"], ["Samples", "3"], ["Porosity range", "10.8 to 17.6 %"], ["Coordinate system", "WGS 84, EPSG:4326"]],
       checks: ["Voxel dimensions", "Segmentation boundaries", "Sample identifiers", "Coordinate reference systems", "Units"],
       deliverables: ["Segmentation files", "Volume visualisations", "Sampling location map", "Measurement table"],
       figures: ["riSlice", "riMap", "riTable"]
@@ -281,7 +281,7 @@ window.PORTFOLIO = {
         ["Change", "Review changes logged with a revision letter and reason."],
         ["Release", "Updated records shared with manufacturing and procurement."]
       ],
-      metrics: [["BOM line items maintained", "48"], ["Revisions logged", "12"], ["Teams coordinated", "Manufacturing and procurement"]],
+      metrics: [["BOM line items maintained", "120"], ["Revisions logged", "8"], ["Teams coordinated", "Manufacturing and procurement"]],
       checks: ["Part references", "Drawing revisions", "Component lists", "Consistency between records and models"],
       deliverables: ["Bills of materials", "Component lists", "Updated engineering records", "Controlled design documentation"],
       figures: ["bomRevision", "bomFlow"]
