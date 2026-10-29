@@ -57,6 +57,8 @@
   }
   function setGlow(group, color, amt) { group.traverse(o => { if (o.material && o.material.emissive) { if (o.userData.e0 === undefined) { o.userData.e0 = o.material.emissive.getHex(); o.userData.ei0 = o.material.emissiveIntensity; o.material = o.material.clone(); } if (amt > 0) { o.material.emissive.setHex(color); o.material.emissiveIntensity = amt; } else { o.material.emissive.setHex(o.userData.e0); o.material.emissiveIntensity = o.userData.ei0; } } }); }
 
+  window.KIT3D = { buildMount, setGlow };
+
   /* ================= Motor mount 3D ================= */
   D["motor-mount"] = host => {
     const rows = [["base", "1", "Base plate", "MM-100 · A36, 10 mm", "1"], ["bracket", "2", "Bracket, slotted", "MM-110 · A36, 8 mm", "2"], ["spacer", "3", "Spacer", "MM-120 · Al 6061", "4"], ["cover", "4", "Cover", "MM-130 · Polycarbonate", "1"], ["screw", "5", "Socket cap screw M8×30", "ISO 4762 · 8.8", "8"], ["motor", "6", "Drive motor", "Supplier STEP", "1"]];

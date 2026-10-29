@@ -12,7 +12,7 @@
   let cleanup = null, heroCleanup = null;
   const fig = (name, opts = {}) => {
     const f = FIG[name]();
-    return opts.thumb ? `<div class="thumb">${f.svg}</div>` :
+    return opts.thumb ? `<div class="thumb" data-thumb="${opts.id || ""}">${f.svg}</div>` :
       `<figure class="fig"><div class="fig-art">${f.svg}</div><figcaption><strong>${esc(f.title)}</strong> ${esc(f.caption)}</figcaption></figure>`;
   };
 
@@ -20,7 +20,7 @@
     const featured = D.featured.includes(p.id);
     return `<article class="card" data-tilt data-filters="${esc(p.filters.join("|"))}">
       <a class="card-link" href="#project-${p.id}" aria-label="${esc(p.title)}, view project">
-        ${fig(p.figures[0], { thumb: true })}
+        ${fig(p.figures[0], { thumb: true, id: p.id })}
         <div class="card-body">
           <div class="card-meta"><span class="num">${p.num}</span><span>${esc(p.area)}</span>${featured ? '<span class="badge">Featured</span>' : ""}</div>
           <span class="try">▶ ${esc(DEMO_LABEL[p.id])}</span>
@@ -236,7 +236,7 @@
       app.querySelector("h1").setAttribute("tabindex", "-1"); app.querySelector("h1").focus({ preventScroll: true });
     } else {
       if (cleanup) { cleanup(); cleanup = null; }
-      if (!app.querySelector("#work")) { app.innerHTML = home(); wire(); try { heroCleanup = window.mountHero3D(document.getElementById("hero3d")); } catch (err) { console.error(err); } }
+      if (!app.querySelector("#work")) { app.innerHTML = home(); wire(); try { const h1 = window.mountHero3D(document.getElementById("hero3d")); const h2 = window.mountCards3D ? window.mountCards3D(app) : () => {}; heroCleanup = () => { h1(); h2(); }; } catch (err) { console.error(err); } }
       document.title = "Jagadeesh Lanka Portfolio";
       const el = h && document.getElementById(h);
       if (el) el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
