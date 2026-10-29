@@ -38,7 +38,7 @@
     <section class="hero wrap" id="top">
       <div class="hero-text">
         <p class="eyebrow">${esc(P.location)}</p>
-        <h1>${esc(P.shortName)}</h1>
+        <h1>${esc(P.name)}</h1>
         <p class="headline">${esc(P.headline)}</p>
         <p class="lede">${esc(P.intro)}</p>
         <div class="actions">
@@ -220,7 +220,7 @@
     } else {
       if (cleanup) { cleanup(); cleanup = null; }
       if (!app.querySelector("#work")) { app.innerHTML = home(); wire(); try { const h1 = window.mountHero3D(document.getElementById("hero3d")); const h2 = window.mountCards3D ? window.mountCards3D(app) : () => {}; heroCleanup = () => { h1(); h2(); }; } catch (err) { console.error(err); } }
-      document.title = "Jagadeesh Lanka Portfolio";
+      document.title = "Naga Durga Jagadeesh Lanka | Portfolio";
       const el = h && document.getElementById(h);
       if (el) el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
       else window.scrollTo(0, 0);
