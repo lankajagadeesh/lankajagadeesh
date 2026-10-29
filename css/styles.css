@@ -479,3 +479,14 @@ table.mini tr.hl td { background: var(--teal-soft); }
 .card .thumb.has3d { padding: 0; }
 .filter-status { font: .85rem var(--body); }
 .hero-visual .three-hint { display: none; }
+
+/* drafting sheet background */
+#sheet { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.site-header { z-index: 20; }
+main, .site-footer { position: relative; z-index: 1; }
+body { background-image: none; }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.sheet-help { color: var(--ink-2); }
+.linkbtn { all: unset; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; color: var(--ink); margin-left: 6px; }
+.linkbtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+@media (hover: none) { .sheet-help { display: none; } }
