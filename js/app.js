@@ -9,7 +9,7 @@
 
   const toolsLine = p => p.tools.map(t => t[0]).join(" · ");
   const DEMO_LABEL = { "puzzle-game": "Playable game", "game-assets": "Playable scene", "motor-mount": "3D assembly viewer", "bracket-fea": "Live stress check", "enclosure-cfd": "Live airflow solver", "turtlebot": "Robot simulator", "rock-imaging": "CT slice viewer", "product-video": "Video player", "bom-records": "BOM checker" };
-  let cleanup = null;
+  let cleanup = null, heroCleanup = null;
   const fig = (name, opts = {}) => {
     const f = FIG[name]();
     return opts.thumb ? `<div class="thumb">${f.svg}</div>` :
@@ -18,7 +18,7 @@
 
   function card(p) {
     const featured = D.featured.includes(p.id);
-    return `<article class="card" data-filters="${esc(p.filters.join("|"))}">
+    return `<article class="card" data-tilt data-filters="${esc(p.filters.join("|"))}">
       <a class="card-link" href="#project-${p.id}" aria-label="${esc(p.title)}, view project">
         ${fig(p.figures[0], { thumb: true })}
         <div class="card-body">
@@ -29,6 +29,7 @@
           <p class="tools-line">${esc(toolsLine(p))}</p>
         </div>
       </a>
+      <span class="shine" aria-hidden="true"></span>
     </article>`;
   }
 
@@ -46,7 +47,9 @@
           <a class="btn" href="${esc(P.resume)}" download>Download resume (PDF)</a>
           <a class="btn" href="#contact">Get in touch</a>
         </div>
+        <div class="hero-stats"><span><b>9</b> interactive 3D projects</span><span><b>40+</b> tools</span><span><b>2</b> playable games</span></div>
       </div>
+      <div class="hero-visual"><div id="hero3d"></div>
       <aside class="titleblock" aria-label="Summary">
         <div class="tb-row tb-head"><span>Drawing title</span><strong>Personal portfolio</strong></div>
         <div class="tb-grid">
@@ -56,8 +59,8 @@
           <div><span>Expected</span><strong>December 2026</strong></div>
           <div><span>Projects</span><strong>${D.projects.length}</strong></div>
         </div>
-        <div class="tb-row"><span>Sheet</span><strong>1 of 1</strong><span>Rev</span><strong>A</strong></div>
-      </aside>
+        <div class="tb-row"><span>Sheet</span><strong>1 of 1</strong><span>Rev</span><strong>B</strong></div>
+      </aside></div>
     </section>
 
     <section class="band" id="work" aria-labelledby="work-h">
@@ -205,6 +208,16 @@
       app.querySelectorAll(".toolb").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
       document.getElementById("tool-find").innerHTML = `<strong>${esc(b.dataset.tool)}</strong> ${hits.length ? `used in ${hits.map(p => `<a href="#project-${p.id}">${esc(p.title)}</a>`).join(", ")}` : "is part of my wider toolset, not featured in these nine projects."}`;
     }));
+    const fine = matchMedia("(hover: hover) and (pointer: fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (fine) app.querySelectorAll("[data-tilt]").forEach(c => {
+      c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.transform = `rotateX(${(0.5 - y) * 10}deg) rotateY(${(x - 0.5) * 12}deg) translateZ(0)`; c.style.setProperty("--mx", x * 100 + "%"); c.style.setProperty("--my", y * 100 + "%"); });
+      c.addEventListener("pointerleave", () => { c.style.transform = ""; });
+    });
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.remove("pre"); io.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px" });
+      app.querySelectorAll(".sec-head, .card, .cap, .process li, .tg, .exp > li").forEach(el => { const r = el.getBoundingClientRect(); if (r.top > innerHeight) { el.classList.add("reveal", "pre"); io.observe(el); } });
+    }
     applyFilter();
   }
 
@@ -215,6 +228,7 @@
     if (h.startsWith("project-") && byId(h.slice(8))) {
       const p = byId(h.slice(8));
       if (cleanup) { cleanup(); cleanup = null; }
+      if (heroCleanup) { heroCleanup(); heroCleanup = null; }
       app.innerHTML = detail(p);
       try { cleanup = window.DEMOS[p.id](document.getElementById("demo-host")) || null; } catch (err) { console.error(err); }
       document.title = `${p.title} | Jagadeesh Lanka`;
@@ -222,7 +236,7 @@
       app.querySelector("h1").setAttribute("tabindex", "-1"); app.querySelector("h1").focus({ preventScroll: true });
     } else {
       if (cleanup) { cleanup(); cleanup = null; }
-      if (!app.querySelector("#work")) { app.innerHTML = home(); wire(); }
+      if (!app.querySelector("#work")) { app.innerHTML = home(); wire(); try { heroCleanup = window.mountHero3D(document.getElementById("hero3d")); } catch (err) { console.error(err); } }
       document.title = "Jagadeesh Lanka Portfolio";
       const el = h && document.getElementById(h);
       if (el) el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
