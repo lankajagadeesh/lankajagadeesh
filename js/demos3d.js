@@ -12,31 +12,31 @@
     const parts = {}, root = new T.Group(); scene.add(root);
     const add = (id, obj) => { (parts[id] = parts[id] || new T.Group()).add(obj); return obj; };
     const steel = K.mat.steel(), dark = K.mat.dark();
-    add("base", K.mesh(new T.BoxGeometry(16, 0.5, 8), K.mat.paint(0x3c4e7a)));
+    add("base", K.mesh(new T.BoxGeometry(16, 0.5, 8), K.mat.paint(0x5d6b7c)));
     parts.base.children[0].position.y = 0.25;
-    [[-5.5, -2.8], [-5.5, 2.8], [5.5, -2.8], [5.5, 2.8]].forEach(([x, z]) => { const s = add("spacer", K.mesh(new T.CylinderGeometry(0.35, 0.35, 0.4, 24), K.mat.glow(0x2ee6c5))); s.position.set(x, 0.7, z); s.material.emissiveIntensity = 0.25; });
+    [[-5.5, -2.8], [-5.5, 2.8], [5.5, -2.8], [5.5, 2.8]].forEach(([x, z]) => { const s = add("spacer", K.mesh(new T.CylinderGeometry(0.35, 0.35, 0.4, 24), K.mat.glow(0x3f7f74))); s.position.set(x, 0.7, z); s.material.emissiveIntensity = 0.25; });
     [-5.5, 5.5].forEach(x => {
       const g = new T.Group();
       const plate = K.mesh(new T.BoxGeometry(0.4, 3, 6.6), steel.clone()); plate.position.y = 1.5; g.add(plate);
       const foot = K.mesh(new T.BoxGeometry(2, 0.4, 6.6), steel.clone()); foot.position.set(x < 0 ? 0.8 : -0.8, 0.2, 0); g.add(foot);
-      [-1.8, 1.8].forEach(z => { const slot = K.mesh(new T.BoxGeometry(0.44, 0.5, 1.8), new T.MeshStandardMaterial({ color: 0x050812 }), false); slot.position.set(0, 2.2, z); g.add(slot); });
+      [-1.8, 1.8].forEach(z => { const slot = K.mesh(new T.BoxGeometry(0.44, 0.5, 1.8), new T.MeshStandardMaterial({ color: 0x222428 }), false); slot.position.set(0, 2.2, z); g.add(slot); });
       g.position.set(x, 0.9, 0); add("bracket", g);
     });
     const motor = new T.Group();
-    const body = K.mesh(new T.CylinderGeometry(1.5, 1.5, 7, 48), K.mat.paint(0x6c7fa8)); body.rotation.z = Math.PI / 2; motor.add(body);
+    const body = K.mesh(new T.CylinderGeometry(1.5, 1.5, 7, 48), K.mat.paint(0x4f6b8a)); body.rotation.z = Math.PI / 2; motor.add(body);
     for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2; const fin = K.mesh(new T.BoxGeometry(6.4, 0.08, 0.28), dark); fin.position.set(0, Math.cos(a) * 1.55, Math.sin(a) * 1.55); fin.rotation.x = -a; motor.add(fin); }
     const tbox = K.mesh(new T.BoxGeometry(1.4, 0.6, 1.2), dark); tbox.position.set(-1, 1.7, 0); motor.add(tbox);
     [-3.6, 3.6].forEach(x => { const cap = K.mesh(new T.CylinderGeometry(1.35, 1.5, 0.3, 48), dark); cap.rotation.z = Math.PI / 2; cap.position.x = x; motor.add(cap); });
     const shaft = K.mesh(new T.CylinderGeometry(0.22, 0.22, 2.2, 24), steel); shaft.rotation.z = Math.PI / 2; shaft.position.x = 4.8; motor.add(shaft);
-    const pulley = K.mesh(new T.CylinderGeometry(0.9, 0.9, 0.6, 40), K.mat.paint(0xff8a3d)); pulley.rotation.z = Math.PI / 2; pulley.position.x = 5.6; motor.add(pulley);
+    const pulley = K.mesh(new T.CylinderGeometry(0.9, 0.9, 0.6, 40), K.mat.paint(0xd2601a)); pulley.rotation.z = Math.PI / 2; pulley.position.x = 5.6; motor.add(pulley);
     motor.position.set(0, 5.1, 0); add("motor", motor);
     [-5.5, 5.5].forEach(x => [-1.8, 1.8].forEach(z => { const sc = new T.Group(); const shank = K.mesh(new T.CylinderGeometry(0.16, 0.16, 1.2, 12), dark); const head = K.mesh(new T.CylinderGeometry(0.3, 0.3, 0.25, 6), K.mat.paint(0xd7dceb)); head.position.y = 0.7; sc.add(shank, head); sc.rotation.z = x < 0 ? Math.PI / 2 : -Math.PI / 2; sc.position.set(x + (x < 0 ? -0.6 : 0.6), 3.1, z); add("screw", sc); }));
     const driven = K.mesh(new T.CylinderGeometry(1.4, 1.4, 0.6, 48), K.mat.paint(0xd7dceb)); driven.rotation.z = Math.PI / 2;
-    const dGroup = new T.Group(); dGroup.add(driven); const stand = K.mesh(new T.BoxGeometry(0.6, 5.1, 1.2), K.mat.paint(0x3c4e7a)); stand.position.set(-0.9, -2.55, 0); const bearing = K.mesh(new T.CylinderGeometry(0.5, 0.5, 0.9, 24), steel); bearing.rotation.z = Math.PI / 2; bearing.position.x = -0.75; dGroup.add(stand, bearing); scene.add(dGroup);
+    const dGroup = new T.Group(); dGroup.add(driven); const stand = K.mesh(new T.BoxGeometry(0.6, 5.1, 1.2), K.mat.paint(0x5d6b7c)); stand.position.set(-0.9, -2.55, 0); const bearing = K.mesh(new T.CylinderGeometry(0.5, 0.5, 0.9, 24), steel); bearing.rotation.z = Math.PI / 2; bearing.position.x = -0.75; dGroup.add(stand, bearing); scene.add(dGroup);
     // drive pulley lives at motor x + 5.6, driven pulley sits further out along z (belt runs across)
     dGroup.position.set(5.6, 5.1, -7);
     const coverGeo = new T.BoxGeometry(9, 4.2, 4.2);
-    const cover = new T.Group(); cover.add(new T.Mesh(coverGeo, K.mat.glass(0x7c5cff)), K.edges(coverGeo, 0xa48bff, 0.9)); cover.position.set(0, 5.1, 0); add("cover", cover);
+    const cover = new T.Group(); cover.add(new T.Mesh(coverGeo, K.mat.glass(0x8a93a6)), K.edges(coverGeo, 0x7d8597, 0.9)); cover.position.set(0, 5.1, 0); add("cover", cover);
     if (opts.guard) { const gg = new T.BoxGeometry(1.4, 3.6, 8.4); const guard = new T.Group(); guard.add(K.mesh(gg, K.mat.paint(0xf2c14e)), K.edges(gg, 0xffffff, 0.3)); guard.position.set(7.1, 5.1, -3.5); add("guard", guard); }
     Object.entries(parts).forEach(([id, g]) => { g.userData.id = id; g.userData.base = g.position.clone(); g.traverse(o => o.userData.part = id); root.add(g); });
     let belt;
@@ -50,7 +50,7 @@
       for (let i = 0; i <= 16; i++) { const t = Math.PI + i / 16 * Math.PI; pts.push(new T.Vector3(b.x, b.y + Math.cos(t) * r2, b.z + Math.sin(t) * r2)); }
       pts.push(new T.Vector3(a.x, a.y + r1 + 0.2, (a.z + b.z) / 2));
       const curve = new T.CatmullRomCurve3(pts, true);
-      belt = K.mesh(new T.TubeGeometry(curve, 160, 0.12, 8, true), new T.MeshStandardMaterial({ color: 0x15192a, roughness: 0.8 }));
+      belt = K.mesh(new T.TubeGeometry(curve, 160, 0.12, 8, true), new T.MeshStandardMaterial({ color: 0x26282c, roughness: 0.8 }));
       root.add(belt);
     }
     return { parts, root, dGroup, setBelt, pulley };
@@ -82,7 +82,7 @@
     }
     function highlight(id) {
       if (hl === id) return; hl = id;
-      Object.entries(M.parts).forEach(([pid, g]) => setGlow(g, 0x2ee6c5, pid === id ? 0.55 : 0));
+      Object.entries(M.parts).forEach(([pid, g]) => setGlow(g, 0x3f7f74, pid === id ? 0.55 : 0));
       host.querySelectorAll("#mm-bom tr[data-p]").forEach(r => r.classList.toggle("hl", r.dataset.p === id));
       const row = rows.find(r => r[0] === id); host.querySelector("#mm-part").textContent = row ? row[2] : "Hover a part";
     }
@@ -114,10 +114,10 @@
     const F = bindOut(host, "fe-f", " N"), Tt = bindOut(host, "fe-t", " mm"), Lr = bindOut(host, "fe-l", " mm");
     let view = "stress";
     const wall = K.mesh(new T.BoxGeometry(0.8, 5, 4), K.mat.dark()); wall.position.set(-0.4, 1.5, 0); S.scene.add(wall);
-    const hatch = K.edges(new T.BoxGeometry(0.8, 5, 4), 0x7c5cff, 0.8); hatch.position.copy(wall.position); S.scene.add(hatch);
+    const hatch = K.edges(new T.BoxGeometry(0.8, 5, 4), 0x8a93a6, 0.8); hatch.position.copy(wall.position); S.scene.add(hatch);
     const SEG = [60, 6, 10]; let geo, beam, wire, base;
-    const arrow = new T.ArrowHelper(new T.Vector3(0, -1, 0), new T.Vector3(0, 3, 0), 1.6, 0xff8a3d, 0.45, 0.3); S.scene.add(arrow);
-    const motorBlock = K.mesh(new T.BoxGeometry(1.2, 1.2, 1.6), K.mat.paint(0x6c7fa8)); S.scene.add(motorBlock);
+    const arrow = new T.ArrowHelper(new T.Vector3(0, -1, 0), new T.Vector3(0, 3, 0), 1.6, 0xd2601a, 0.45, 0.3); S.scene.add(arrow);
+    const motorBlock = K.mesh(new T.BoxGeometry(1.2, 1.2, 1.6), K.mat.paint(0x4f6b8a)); S.scene.add(motorBlock);
     const tag = K.label(S, "", "big");
     function build() {
       const L = +Lr.value / 1000, t = +Tt.value / 1000, Lw = L * 60, tw = Math.max(0.15, t * 60), bw = 2.4;
@@ -126,7 +126,7 @@
       base = geo.attributes.position.array.slice();
       geo.setAttribute("color", new T.BufferAttribute(new Float32Array(geo.attributes.position.count * 3), 3));
       beam = K.mesh(geo, new T.MeshStandardMaterial({ vertexColors: true, roughness: 0.45, metalness: 0.1 }));
-      wire = new T.LineSegments(new T.WireframeGeometry(geo), new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.18 })); wire.visible = host.querySelector("#fe-wire").getAttribute("aria-pressed") === "true";
+      wire = new T.LineSegments(new T.WireframeGeometry(geo), new T.LineBasicMaterial({ color: 0x1c1e22, transparent: true, opacity: 0.18 })); wire.visible = host.querySelector("#fe-wire").getAttribute("aria-pressed") === "true";
       S.scene.add(beam, wire); beam.userData = { Lw, tw };
     }
     [F, Tt, Lr].forEach(i => i.addEventListener("input", () => { if (i !== F) build(); }));
@@ -176,12 +176,12 @@
     let phi = new Float32Array(NX * NY), u = new Float32Array(NX * NY), v = new Float32Array(NX * NY), Tm = new Float32Array(NX * NY), lay = "rec", isOut;
     const gx = i => -W / 2 + (i + 0.5) / NX * W, gy = j => H - (j + 0.5) / NY * H;
     // enclosure
-    const boxGeo = new T.BoxGeometry(W, H, DEP); const shell = new T.Mesh(boxGeo, K.mat.glass(0x9fe9ff)); shell.position.y = H / 2; S.scene.add(shell);
-    const shellE = K.edges(boxGeo, 0x6fe3ff, 0.8); shellE.position.y = H / 2; S.scene.add(shellE);
+    const boxGeo = new T.BoxGeometry(W, H, DEP); const shell = new T.Mesh(boxGeo, K.mat.glass(0xc9d3da)); shell.position.y = H / 2; S.scene.add(shell);
+    const shellE = K.edges(boxGeo, 0x8a9aa8, 0.8); shellE.position.y = H / 2; S.scene.add(shellE);
     const comp = (x0, y0, x1, y1, color, name) => { const w = (x1 - x0) / NX * W, h = (y1 - y0) / NY * H; const m = K.mesh(new T.BoxGeometry(w, h, DEP * 0.8), K.mat.paint(color)); m.position.set(gx(x0) + w / 2 - W / NX / 2, gy(y1 - 1) + h / 2 - H / NY / 2, 0); S.scene.add(m); return m; };
-    comp(14, 30, 48, 34, 0x1f6f4a, "Board"); comp(54, 24, 64, 36, 0x5a6684, "PSU"); const proc = comp(26, 26, 36, 30, 0x2a3350, "Processor");
+    comp(14, 30, 48, 34, 0x1f6f4a, "Board"); comp(54, 24, 64, 36, 0x5a6684, "PSU"); const proc = comp(26, 26, 36, 30, 0x3a3d43, "Processor");
     for (let i = 0; i < 7; i++) { const fin = K.mesh(new T.BoxGeometry(0.06, 0.5, DEP * 0.7), K.mat.steel()); fin.position.set(proc.position.x - 0.6 + i * 0.2, proc.position.y + 0.45, 0); S.scene.add(fin); }
-    const fanG = new T.Group(); for (let i = 0; i < 5; i++) { const bl = K.mesh(new T.BoxGeometry(0.05, 0.9, 0.3), K.mat.glow(0x2ee6c5)); bl.position.y = 0.45; const piv = new T.Group(); piv.rotation.x = i / 5 * Math.PI * 2; piv.add(bl); fanG.add(piv); }
+    const fanG = new T.Group(); for (let i = 0; i < 5; i++) { const bl = K.mesh(new T.BoxGeometry(0.05, 0.9, 0.3), K.mat.glow(0x3f7f74)); bl.position.y = 0.45; const piv = new T.Group(); piv.rotation.x = i / 5 * Math.PI * 2; piv.add(bl); fanG.add(piv); }
     fanG.position.set(-W / 2 + 0.1, gy(17), 0); S.scene.add(fanG);
     const ring = K.mesh(new T.TorusGeometry(0.95, 0.06, 8, 32), K.mat.steel()); ring.rotation.y = Math.PI / 2; ring.position.copy(fanG.position); S.scene.add(ring);
     const ventGroup = new T.Group(); S.scene.add(ventGroup);
@@ -193,7 +193,7 @@
     // particles
     const NP = 900, pgeo = new T.BufferGeometry(), pp = new Float32Array(NP * 3), pc = new Float32Array(NP * 3), pij = new Float32Array(NP * 2);
     pgeo.setAttribute("position", new T.BufferAttribute(pp, 3)); pgeo.setAttribute("color", new T.BufferAttribute(pc, 3));
-    const pts = new T.Points(pgeo, new T.PointsMaterial({ size: 0.12, vertexColors: true, transparent: true, opacity: 1, depthWrite: false, blending: T.AdditiveBlending })); S.scene.add(pts);
+    const pts = new T.Points(pgeo, new T.PointsMaterial({ size: 0.12, vertexColors: true, transparent: true, opacity: 1, depthWrite: false, blending: T.NormalBlending })); S.scene.add(pts);
     const spawn = k => { pij[k * 2] = Math.random() * 2; pij[k * 2 + 1] = 12 + Math.random() * 10; pp[k * 3 + 2] = (Math.random() - 0.5) * DEP * 0.85; };
     for (let k = 0; k < NP; k++) { spawn(k); pij[k * 2] = Math.random() * NX; pij[k * 2 + 1] = Math.random() * NY; }
     function flow() {
@@ -213,7 +213,7 @@
       for (let i = 0; i < u.length; i++) { u[i] /= m; v[i] /= m; }
       Tm.fill(0);
       while (ventGroup.children.length) ventGroup.remove(ventGroup.children[0]);
-      outs.forEach(([x, a, b]) => { for (let k = a; k < b; k += 2) { const g = new T.BoxGeometry(x === -1 ? W / NX * 1.4 : 0.08, x === -1 ? 0.08 : H / NY * 1.4, DEP * 0.7); const s = new T.Mesh(g, K.mat.glow(0x2ee6c5)); if (x === -1) s.position.set(gx(k), H, 0); else s.position.set(W / 2, gy(k), 0); ventGroup.add(s); } });
+      outs.forEach(([x, a, b]) => { for (let k = a; k < b; k += 2) { const g = new T.BoxGeometry(x === -1 ? W / NX * 1.4 : 0.08, x === -1 ? 0.08 : H / NY * 1.4, DEP * 0.7); const s = new T.Mesh(g, K.mat.glow(0x3f7f74)); if (x === -1) s.position.set(gx(k), H, 0); else s.position.set(W / 2, gy(k), 0); ventGroup.add(s); } });
     }
     function step() {
       src.fill(0); rect(26, 26, 36, 30, src, +q.value * 0.012); rect(54, 24, 64, 36, src, 0.06);
@@ -267,25 +267,25 @@
     const th = bindOut(host, "tb-th", " m", v => v.toFixed(2)), vs = bindOut(host, "tb-v", " m/s", v => v.toFixed(2)), rays = host.querySelector("#tb-rays");
     const PX = 120, to3 = (x, y) => [(x - 240) / PX, (y - 160) / PX];
     const walls = new T.Group(); S.scene.add(walls);
-    [[0, -1.333, 4, 0.04], [0, 1.333, 4, 0.04], [-2, 0, 0.04, 2.667], [2, 0, 0.04, 2.667]].forEach(([x, z, w, d]) => { const m = K.mesh(new T.BoxGeometry(w, 0.25, d), K.mat.paint(0x2a3a6e)); m.position.set(x, 0.125, z); walls.add(m); });
+    [[0, -1.333, 4, 0.04], [0, 1.333, 4, 0.04], [-2, 0, 0.04, 2.667], [2, 0, 0.04, 2.667]].forEach(([x, z, w, d]) => { const m = K.mesh(new T.BoxGeometry(w, 0.25, d), K.mat.paint(0x8f939a)); m.position.set(x, 0.125, z); walls.add(m); });
     const boxG = new T.Group(); S.scene.add(boxG);
     const robot = new T.Group();
-    [0.02, 0.09, 0.16].forEach((y, i) => { const d = K.mesh(new T.CylinderGeometry(0.1, 0.1, 0.012, 32), K.mat.paint(i === 2 ? 0x2a3350 : 0x1b2238)); d.position.y = y + 0.03; robot.add(d); });
+    [0.02, 0.09, 0.16].forEach((y, i) => { const d = K.mesh(new T.CylinderGeometry(0.1, 0.1, 0.012, 32), K.mat.paint(i === 2 ? 0x3a3d43 : 0x2f3237)); d.position.y = y + 0.03; robot.add(d); });
     [[-0.07, 0.07], [0.07, 0.07], [-0.07, -0.07], [0.07, -0.07]].forEach(([x, z]) => { const p = K.mesh(new T.CylinderGeometry(0.006, 0.006, 0.16, 6), K.mat.steel()); p.position.set(x, 0.12, z); robot.add(p); });
     [-1, 1].forEach(s => { const w = K.mesh(new T.CylinderGeometry(0.033, 0.033, 0.018, 24), K.mat.dark()); w.rotation.x = Math.PI / 2; w.position.set(0, 0.033, s * 0.09); robot.add(w); });
-    const lidar = K.mesh(new T.CylinderGeometry(0.035, 0.035, 0.04, 24), K.mat.glow(0x2ee6c5)); lidar.position.y = 0.21; robot.add(lidar);
+    const lidar = K.mesh(new T.CylinderGeometry(0.035, 0.035, 0.04, 24), K.mat.glow(0x3f7f74)); lidar.position.y = 0.21; robot.add(lidar);
     S.scene.add(robot);
-    const mover = K.mesh(new T.CylinderGeometry(0.117, 0.117, 0.3, 32), K.mat.paint(0xff8a3d)); mover.position.y = 0.15; S.scene.add(mover);
+    const mover = K.mesh(new T.CylinderGeometry(0.117, 0.117, 0.3, 32), K.mat.paint(0xd2601a)); mover.position.y = 0.15; S.scene.add(mover);
     const rayGeo = new T.BufferGeometry(); const rayPos = new Float32Array(120 * 6); rayGeo.setAttribute("position", new T.BufferAttribute(rayPos, 3));
-    const rayLines = new T.LineSegments(rayGeo, new T.LineBasicMaterial({ color: 0x2ee6c5, transparent: true, opacity: 0.28 })); S.scene.add(rayLines);
+    const rayLines = new T.LineSegments(rayGeo, new T.LineBasicMaterial({ color: 0x3f7f74, transparent: true, opacity: 0.28 })); S.scene.add(rayLines);
     const hitGeo = new T.BufferGeometry(); const hitPos = new Float32Array(120 * 3); hitGeo.setAttribute("position", new T.BufferAttribute(hitPos, 3));
-    S.scene.add(new T.Points(hitGeo, new T.PointsMaterial({ color: 0x2ee6c5, size: 0.035 })));
+    S.scene.add(new T.Points(hitGeo, new T.PointsMaterial({ color: 0x3f7f74, size: 0.035 })));
     const trailGeo = new T.BufferGeometry(); const trailPos = new Float32Array(400 * 3); trailGeo.setAttribute("position", new T.BufferAttribute(trailPos, 3)); trailGeo.setDrawRange(0, 0);
-    S.scene.add(new T.Line(trailGeo, new T.LineBasicMaterial({ color: 0xa48bff })));
-    const ring = new T.Mesh(new T.RingGeometry(0.29, 0.3, 64), new T.MeshBasicMaterial({ color: 0xff8a3d, transparent: true, opacity: 0.7, side: T.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.01; S.scene.add(ring);
+    S.scene.add(new T.Line(trailGeo, new T.LineBasicMaterial({ color: 0x7d8597 })));
+    const ring = new T.Mesh(new T.RingGeometry(0.29, 0.3, 64), new T.MeshBasicMaterial({ color: 0xd2601a, transparent: true, opacity: 0.7, side: T.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.01; S.scene.add(ring);
     let R, boxes, mv, paused = false, trail = [], scan = [], cam = "orbit";
     function rebuildBoxes() { while (boxG.children.length) { const c = boxG.children.pop(); c.geometry.dispose(); }
-      boxes.forEach(([x, y, w, h], i) => { const [cx, cz] = to3(x + w / 2, y + h / 2); const m = K.mesh(new T.BoxGeometry(w / PX, 0.3, h / PX), K.mat.paint(i % 2 ? 0x3c4e7a : 0x4b5f92)); m.position.set(cx, 0.15, cz); m.userData.i = i; boxG.add(m); }); }
+      boxes.forEach(([x, y, w, h], i) => { const [cx, cz] = to3(x + w / 2, y + h / 2); const m = K.mesh(new T.BoxGeometry(w / PX, 0.3, h / PX), K.mat.paint(i % 2 ? 0x5d6b7c : 0x6e7a88)); m.position.set(cx, 0.15, cz); m.userData.i = i; boxG.add(m); }); }
     function reset() { R = { x: 60, y: 260, a: -0.6 }; trail = []; boxes = [[140, 70, 36, 36], [230, 170, 36, 36], [340, 50, 30, 90], [110, 200, 36, 36], [380, 220, 36, 36]]; mv = { x: 300, y: 280, vx: -12 }; rebuildBoxes(); }
     reset();
     function cast(x, y, a) {
@@ -361,16 +361,16 @@
       grid = LEVELS[i].map(r => [...r]); crates = []; switches = []; moves = 0; hist = []; won = false; rows = grid.length; cols = grid[0].length;
       grid.forEach((r, y) => r.forEach((ch, x) => { if (ch === "P") player = [x, y]; if (ch === "C") crates.push([x, y]); if (ch === "S") switches.push([x, y]); if (ch === "D") door = [x, y]; if (ch === "E") exit = [x, y]; if ("PCSE".includes(ch)) grid[y][x] = "."; }));
       clearBoard();
-      const floorM = K.mat.paint(0x1a2448), floorM2 = K.mat.paint(0x1f2b55), wallM = K.mat.paint(0x3a4f8c);
+      const floorM = K.mat.paint(0xd7d7d0), floorM2 = K.mat.paint(0xcfd0c8), wallM = K.mat.paint(0x8a8e95);
       grid.forEach((r, y) => r.forEach((ch, x) => { const [px, pz] = P(x, y);
-        if (ch === "#") { const w = K.mesh(new T.BoxGeometry(1, 0.9, 1), wallM); w.position.set(px, 0.45, pz); board.add(w); const top = K.edges(new T.BoxGeometry(1, 0.9, 1), 0x6f8cff, 0.35); top.position.copy(w.position); board.add(top); }
+        if (ch === "#") { const w = K.mesh(new T.BoxGeometry(1, 0.9, 1), wallM); w.position.set(px, 0.45, pz); board.add(w); const top = K.edges(new T.BoxGeometry(1, 0.9, 1), 0x56677f, 0.35); top.position.copy(w.position); board.add(top); }
         else { const f = K.mesh(new T.BoxGeometry(0.98, 0.1, 0.98), (x + y) % 2 ? floorM : floorM2, false); f.position.set(px, 0.05, pz); board.add(f); } }));
-      switches.forEach(([x, y]) => { const [px, pz] = P(x, y); const s = new T.Mesh(new T.TorusGeometry(0.3, 0.06, 12, 40), K.mat.glow(0x2ee6c5)); s.rotation.x = -Math.PI / 2; s.position.set(px, 0.13, pz); board.add(s); });
-      { const [px, pz] = P(...exit); const e = new T.Mesh(new T.TorusGeometry(0.34, 0.05, 8, 4), K.mat.glow(0xa48bff)); e.rotation.x = -Math.PI / 2; e.rotation.z = Math.PI / 4; e.position.set(px, 0.15, pz); board.add(e); meshes.exit = e; const beam = new T.Mesh(new T.CylinderGeometry(0.3, 0.3, 2, 24, 1, true), new T.MeshBasicMaterial({ color: 0xa48bff, transparent: true, opacity: 0.12, side: T.DoubleSide, depthWrite: false })); beam.position.set(px, 1.1, pz); board.add(beam); }
-      { const [px, pz] = P(...door); const d = K.mesh(new T.BoxGeometry(0.9, 0.9, 0.2), K.mat.glow(0xff8a3d)); d.material.emissiveIntensity = 0.35; d.position.set(px, 0.45, pz); if (grid[door[1]][door[0] - 1] === "#" && grid[door[1]][door[0] + 1] === "#") {} else d.rotation.y = Math.PI / 2; board.add(d); meshes.door = d; }
+      switches.forEach(([x, y]) => { const [px, pz] = P(x, y); const s = new T.Mesh(new T.TorusGeometry(0.3, 0.06, 12, 40), K.mat.glow(0x3f7f74)); s.rotation.x = -Math.PI / 2; s.position.set(px, 0.13, pz); board.add(s); });
+      { const [px, pz] = P(...exit); const e = new T.Mesh(new T.TorusGeometry(0.34, 0.05, 8, 4), K.mat.glow(0x7d8597)); e.rotation.x = -Math.PI / 2; e.rotation.z = Math.PI / 4; e.position.set(px, 0.15, pz); board.add(e); meshes.exit = e; const beam = new T.Mesh(new T.CylinderGeometry(0.3, 0.3, 2, 24, 1, true), new T.MeshBasicMaterial({ color: 0x7d8597, transparent: true, opacity: 0.12, side: T.DoubleSide, depthWrite: false })); beam.position.set(px, 1.1, pz); board.add(beam); }
+      { const [px, pz] = P(...door); const d = K.mesh(new T.BoxGeometry(0.9, 0.9, 0.2), K.mat.glow(0xd2601a)); d.material.emissiveIntensity = 0.35; d.position.set(px, 0.45, pz); if (grid[door[1]][door[0] - 1] === "#" && grid[door[1]][door[0] + 1] === "#") {} else d.rotation.y = Math.PI / 2; board.add(d); meshes.door = d; }
       meshes.crates = crates.map(([x, y]) => { const g = new T.Group(); const b = K.mesh(new T.BoxGeometry(0.8, 0.8, 0.8), K.mat.paint(0xb07a3c)); g.add(b); const e = K.edges(new T.BoxGeometry(0.8, 0.8, 0.8), 0x4a2c10, 1); g.add(e); const [px, pz] = P(x, y); g.position.set(px, 0.5, pz); board.add(g); return g; });
-      const pl = new T.Group(); const body = K.mesh(new T.CylinderGeometry(0.26, 0.3, 0.5, 24), K.mat.paint(0xe6ecff)); body.position.y = 0.35; const head = K.mesh(new T.SphereGeometry(0.24, 24, 16), K.mat.paint(0xe6ecff)); head.position.y = 0.8;
-      const visor = K.mesh(new T.BoxGeometry(0.3, 0.1, 0.1), K.mat.glow(0x2ee6c5)); visor.position.set(0, 0.82, 0.2); pl.add(body, head, visor);
+      const pl = new T.Group(); const body = K.mesh(new T.CylinderGeometry(0.26, 0.3, 0.5, 24), K.mat.paint(0xf2f2ef)); body.position.y = 0.35; const head = K.mesh(new T.SphereGeometry(0.24, 24, 16), K.mat.paint(0xf2f2ef)); head.position.y = 0.8;
+      const visor = K.mesh(new T.BoxGeometry(0.3, 0.1, 0.1), K.mat.glow(0x3f7f74)); visor.position.set(0, 0.82, 0.2); pl.add(body, head, visor);
       const [ppx, ppz] = P(...player); pl.position.set(ppx, 0.1, ppz); board.add(pl); meshes.player = pl;
       S.camera.position.set(0, rows * 1.1 + 2, rows * 0.95 + 2); S.controls.target.set(0, 0, 0);
       host.querySelectorAll(".pg-levels .chip").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.l === lv)));
@@ -403,7 +403,7 @@
       pl.position.x = lerp(pl.position.x, tx, 0.25); pl.position.z = lerp(pl.position.z, tz, 0.25); pl.position.y = 0.1 + Math.abs(Math.sin(t * 6)) * 0.05 + (won ? Math.abs(Math.sin(t * 10)) * 0.3 : 0);
       pl.rotation.y = lerp(pl.rotation.y, facing, 0.3);
       meshes.crates.forEach((m, i) => { const [cx, cz] = P(...crates[i]); m.position.x = lerp(m.position.x, cx, 0.3); m.position.z = lerp(m.position.z, cz, 0.3);
-        const on = switches.some(s => s[0] === crates[i][0] && s[1] === crates[i][1]); m.children[0].material.color.setHex(on ? 0x2ee6c5 : 0xb07a3c); });
+        const on = switches.some(s => s[0] === crates[i][0] && s[1] === crates[i][1]); m.children[0].material.color.setHex(on ? 0x3f7f74 : 0xb07a3c); });
       meshes.door.position.y = lerp(meshes.door.position.y, open() ? -0.45 : 0.45, 0.08);
       meshes.exit.rotation.z += dt;
     });
@@ -419,9 +419,9 @@
       <div class="pg-pad" aria-label="Touch controls"><button type="button" data-d="0,-1" aria-label="Forward">▲</button><button type="button" data-d="-1,0" aria-label="Left">◀</button><button type="button" data-d="1,0" aria-label="Right">▶</button><button type="button" data-d="0,1" aria-label="Back">▼</button></div>
       <div class="ctl-row">${slider("ga-fps", "Walk cycle speed", 4, 24, 1, 12, " fps")}</div>
       <p class="demo-note">Click the scene, then use arrow keys or WASD to run and space to jump. The voxel character uses an 8 frame walk cycle at 12 fps, with colours from the project palette.</p>`;
-    const S = K.stage(host.querySelector("#ga-3d"), { height: 460, cam: [0, 7, 10], target: [0, 0, 0], label: "Voxel world with a character collecting gems", focusable: true, hint: "Click, then arrow keys to run · space to jump", floor: false, bg: 0x6fb6ff, fogNear: 18, fogFar: 40, shadowSize: 14 });
+    const S = K.stage(host.querySelector("#ga-3d"), { height: 460, cam: [0, 7, 10], target: [0, 0, 0], label: "Voxel world with a character collecting gems", focusable: true, hint: "Click, then arrow keys to run · space to jump", floor: false, bg: 0xbcd3e6, fogNear: 18, fogFar: 40, shadowSize: 14 });
     const fpsIn = bindOut(host, "ga-fps", " fps");
-    const pal = { grass: 0x38b764, dirt: 0x7a5230, stone: 0x566c86, skin: 0xffcd75, shirt: 0x3b5dc9, pants: 0x1d2b53, gem: 0xef3b6a, leaf: 0x257179, trunk: 0x5d3a22 };
+    const pal = { grass: 0x38b764, dirt: 0x7a5230, stone: 0x566c86, skin: 0xffcd75, shirt: 0x3b5dc9, pants: 0x1d2b53, gem: 0xc0304f, leaf: 0x257179, trunk: 0x5d3a22 };
     const hAt = (x, z) => Math.round(Math.sin(x * 0.35) * 0.8 + Math.cos(z * 0.3) * 0.8);
     const R0 = 12, cube = new T.BoxGeometry(1, 1, 1); let count = 0; const cells = [];
     for (let x = -R0; x <= R0; x++) for (let z = -R0; z <= R0; z++) if (x * x + z * z < R0 * R0) cells.push([x, z]);
@@ -449,7 +449,7 @@
     S.renderer.domElement.addEventListener("pointerdown", () => S.wrap.focus());
     host.querySelectorAll(".pg-pad button").forEach(b => { const [dx, dz] = b.dataset.d.split(",").map(Number), k = dz < 0 ? "f" : dz > 0 ? "b" : dx < 0 ? "l" : "r";
       b.addEventListener("pointerdown", e => { e.preventDefault(); keys[k] = true; }); ["pointerup", "pointerleave"].forEach(ev => b.addEventListener(ev, () => keys[k] = false)); });
-    host.querySelector("#ga-tod").addEventListener("click", e => { night = !night; e.currentTarget.textContent = night ? "Switch to day" : "Switch to night"; S.scene.background.setHex(night ? 0x0b0f2e : 0x6fb6ff); S.scene.fog.color.setHex(night ? 0x0b0f2e : 0x6fb6ff); S.sun.intensity = night ? 0.15 : 1.25; gems.forEach(g => g.pl.intensity = night ? 2 : 0); });
+    host.querySelector("#ga-tod").addEventListener("click", e => { night = !night; e.currentTarget.textContent = night ? "Switch to day" : "Switch to night"; S.scene.background.setHex(night ? 0x0b0f2e : 0xbcd3e6); S.scene.fog.color.setHex(night ? 0x0b0f2e : 0xbcd3e6); S.sun.intensity = night ? 0.15 : 1.25; gems.forEach(g => g.pl.intensity = night ? 2 : 0); });
     S.controls.enableRotate = true;
     S.onFrame((dt, t) => {
       let mx = 0, mz = 0; if (keys.f) mz -= 1; if (keys.b) mz += 1; if (keys.l) mx -= 1; if (keys.r) mx += 1;
@@ -485,7 +485,7 @@
     const texCvs = document.createElement("canvas"); texCvs.width = N; texCvs.height = N; const tctx = texCvs.getContext("2d");
     const tex = new T.CanvasTexture(texCvs); tex.magFilter = T.NearestFilter; tex.encoding = T.sRGBEncoding;
     const cut = new T.Mesh(new T.PlaneGeometry(SZ, SZ), new T.MeshBasicMaterial({ map: tex, side: T.DoubleSide })); cut.rotation.x = -Math.PI / 2; S.scene.add(cut);
-    const cutE = K.edges(new T.PlaneGeometry(SZ, SZ), 0xff8a3d, 1); cutE.rotation.x = -Math.PI / 2; S.scene.add(cutE);
+    const cutE = K.edges(new T.PlaneGeometry(SZ, SZ), 0xd2601a, 1); cutE.rotation.x = -Math.PI / 2; S.scene.add(cutE);
     let vol, spheres = [], inst, cur = 1;
     function build(core) {
       let s = core.seed; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
@@ -495,7 +495,7 @@
         for (let zz = Math.max(0, cz - rad | 0); zz < Math.min(N, cz + rad + 1); zz++) for (let y = Math.max(0, cy - rad | 0); y < Math.min(N, cy + rad + 1); y++) for (let x = Math.max(0, cx - rad | 0); x < Math.min(N, cx + rad + 1); x++) {
           const d = Math.hypot(x - cx, y - cy, zz - cz); if (d < rad) vol[(zz * N + y) * N + x] = 30 + r() * 50 + (d / rad) * 40; } }
       if (inst) { S.scene.remove(inst); inst.geometry.dispose(); }
-      inst = new T.InstancedMesh(new T.SphereGeometry(1, 14, 10), new T.MeshStandardMaterial({ color: 0x2ee6c5, emissive: 0x0e5f55, emissiveIntensity: 0.6, roughness: 0.3, clippingPlanes: [clip] }), spheres.length);
+      inst = new T.InstancedMesh(new T.SphereGeometry(1, 14, 10), new T.MeshStandardMaterial({ color: 0x3f7f74, emissive: 0x1f3f39, emissiveIntensity: 0.6, roughness: 0.3, clippingPlanes: [clip] }), spheres.length);
       const m = new T.Matrix4(), sc = SZ / N;
       spheres.forEach(([x, y, zz, rad], i) => { m.makeScale(rad * sc, rad * sc, rad * sc); m.setPosition(x * sc - SZ / 2, zz * sc, y * sc - SZ / 2); inst.setMatrixAt(i, m); });
       inst.castShadow = true; S.scene.add(inst);
@@ -528,16 +528,16 @@
       <label class="ctl check"><input type="checkbox" id="vp-cc" checked> <span>Captions</span></label></div>
       <div class="vp-ch">${chapters.map(([t, n]) => `<button type="button" class="chip" data-t="${t}">${n}</button>`).join("")}</div></div>
       <p class="demo-note">A condensed, playable 3D version of the cut with the same chapters, title cards, and captions. The timecode shows the position in the full three minute, 1080p H.264 edit. You can grab the camera at any time.</p>`;
-    const S = K.stage(host.querySelector("#vp-3d"), { height: 420, cam: shots[0][0], target: shots[0][1], label: "3D product video", hint: "Press play · drag to look around", shadowSize: 8, bg: 0x0b1226 });
+    const S = K.stage(host.querySelector("#vp-3d"), { height: 420, cam: shots[0][0], target: shots[0][1], label: "3D product video", hint: "Press play · drag to look around", shadowSize: 8, bg: 0xe7e8e3 });
     const over = document.createElement("div"); over.className = "vp-over"; over.innerHTML = `<div class="vp-title"><strong></strong><span></span></div><div class="vp-cap"></div><div class="vp-badge">1080p · H.264</div>`; S.wrap.appendChild(over);
-    const frame = K.mesh(new T.BoxGeometry(6, 0.3, 3.4), K.mat.paint(0x3c4e7a)); frame.position.y = 0.6; S.scene.add(frame);
+    const frame = K.mesh(new T.BoxGeometry(6, 0.3, 3.4), K.mat.paint(0x5d6b7c)); frame.position.y = 0.6; S.scene.add(frame);
     [[-2.7, -1.5], [2.7, -1.5], [-2.7, 1.5], [2.7, 1.5]].forEach(([x, z]) => { const l = K.mesh(new T.BoxGeometry(0.25, 0.6, 0.25), K.mat.dark()); l.position.set(x, 0.3, z); S.scene.add(l); });
     const unit = new T.Group(); const shellM = K.mesh(new T.BoxGeometry(4, 2.2, 2.6), K.mat.paint(0xe6e9ef)); shellM.position.y = 1.1; unit.add(shellM);
     const bezel = K.mesh(new T.CylinderGeometry(0.85, 0.85, 0.1, 48), K.mat.paint(0x0e7470)); bezel.rotation.x = Math.PI / 2; bezel.position.set(-0.5, 1.15, 1.31); unit.add(bezel);
-    const fanG = new T.Group(); for (let i = 0; i < 6; i++) { const b = K.mesh(new T.BoxGeometry(0.16, 0.7, 0.04), K.mat.glow(0x2ee6c5)); b.position.y = 0.35; const p = new T.Group(); p.rotation.z = i / 6 * Math.PI * 2; p.add(b); fanG.add(p); }
+    const fanG = new T.Group(); for (let i = 0; i < 6; i++) { const b = K.mesh(new T.BoxGeometry(0.16, 0.7, 0.04), K.mat.glow(0x3f7f74)); b.position.y = 0.35; const p = new T.Group(); p.rotation.z = i / 6 * Math.PI * 2; p.add(b); fanG.add(p); }
     fanG.position.set(-0.5, 1.15, 1.38); unit.add(fanG);
     const led = K.mesh(new T.SphereGeometry(0.12, 16, 12), K.mat.glow(0x55607a)); led.position.set(1.4, 1.7, 1.32); unit.add(led);
-    const btn = K.mesh(new T.CylinderGeometry(0.2, 0.2, 0.12, 24), K.mat.paint(0xff8a3d)); btn.rotation.x = Math.PI / 2; btn.position.set(1.4, 0.8, 1.33); unit.add(btn);
+    const btn = K.mesh(new T.CylinderGeometry(0.2, 0.2, 0.12, 24), K.mat.paint(0xd2601a)); btn.rotation.x = Math.PI / 2; btn.position.set(1.4, 0.8, 1.33); unit.add(btn);
     S.scene.add(unit);
     const screws = [[-1.7, -1], [1.7, -1], [-1.7, 1], [1.7, 1]].map(([x, z]) => { const s = K.mesh(new T.CylinderGeometry(0.1, 0.1, 0.5, 12), K.mat.steel()); s.position.set(x, 3, z); S.scene.add(s); return s; });
     const cablePts = [new T.Vector3(2, 1, 0), new T.Vector3(3.2, 1, 0.2), new T.Vector3(3.8, 0.5, 1.2), new T.Vector3(4.2, 0.1, 2.6), new T.Vector3(5.5, 0.05, 3.2)];
@@ -586,7 +586,7 @@
     function select(id) { sel = id; top.querySelector("#bm-sel").textContent = id ? names[id] : "Click a part or a BOM row"; S.controls.autoRotate = !id; bottom.querySelectorAll("#bm-t tbody tr").forEach(tr => tr.classList.toggle("hl", !!id && map[tr.children[0].textContent] === id)); }
     S.renderer.domElement.addEventListener("click", e => { const h = S.pick(e, Object.values(M.parts)); select(h.length ? h[0].object.userData.part : null); });
     bottom.addEventListener("click", e => { const tr = e.target.closest("#bm-t tbody tr"); if (tr && e.target.tagName !== "INPUT") select(map[tr.children[0].textContent] || null); });
-    S.onFrame((dt, t) => { M.pulley.rotation.x += dt * 4; Object.entries(M.parts).forEach(([id, g]) => setGlow(g, bad.has(id) ? 0xff3b3b : 0x2ee6c5, bad.has(id) ? 0.35 + Math.sin(t * 5) * 0.25 : id === sel ? 0.6 : 0)); });
+    S.onFrame((dt, t) => { M.pulley.rotation.x += dt * 4; Object.entries(M.parts).forEach(([id, g]) => setGlow(g, bad.has(id) ? 0xff3b3b : 0x3f7f74, bad.has(id) ? 0.35 + Math.sin(t * 5) * 0.25 : id === sel ? 0.6 : 0)); });
     return () => { S.dispose(); cleanup2d && cleanup2d(); };
   };
 })();

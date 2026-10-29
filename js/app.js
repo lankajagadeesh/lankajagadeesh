@@ -8,7 +8,7 @@
   try { activeFilter = sessionStorage.getItem("pf-filter") || "All"; } catch (e) {}
 
   const toolsLine = p => p.tools.map(t => t[0]).join(" · ");
-  const DEMO_LABEL = { "puzzle-game": "Playable game", "game-assets": "Playable scene", "motor-mount": "3D assembly viewer", "bracket-fea": "Live stress check", "enclosure-cfd": "Live airflow solver", "turtlebot": "Robot simulator", "rock-imaging": "CT slice viewer", "product-video": "Video player", "bom-records": "BOM checker" };
+  const DEMO_LABEL = { "puzzle-game": "Playable in the browser", "game-assets": "Playable in the browser", "motor-mount": "Interactive 3D assembly", "bracket-fea": "Interactive stress check", "enclosure-cfd": "Interactive airflow model", "turtlebot": "Interactive robot simulation", "rock-imaging": "Interactive CT viewer", "product-video": "Playable 3D cut", "bom-records": "Interactive BOM check" };
   let cleanup = null, heroCleanup = null;
   const fig = (name, opts = {}) => {
     const f = FIG[name]();
@@ -22,15 +22,14 @@
       <a class="card-link" href="#project-${p.id}" aria-label="${esc(p.title)}, view project">
         ${fig(p.figures[0], { thumb: true, id: p.id })}
         <div class="card-body">
-          <div class="card-meta"><span class="num">${p.num}</span><span>${esc(p.area)}</span>${featured ? '<span class="badge">Featured</span>' : ""}</div>
-          <span class="try">▶ ${esc(DEMO_LABEL[p.id])}</span>
+          <div class="card-meta"><span class="num">${p.num}</span><span>${esc(p.area)}</span></div>
+          <span class="try">${esc(DEMO_LABEL[p.id])}</span>
           <h3>${esc(p.title)}</h3>
           <p>${esc(p.summary)}</p>
           <p class="tools-line">${esc(toolsLine(p))}</p>
         </div>
       </a>
-      <span class="shine" aria-hidden="true"></span>
-    </article>`;
+          </article>`;
   }
 
   function home() {
@@ -47,20 +46,10 @@
           <a class="btn" href="${esc(P.resume)}" download>Download resume (PDF)</a>
           <a class="btn" href="#contact">Get in touch</a>
         </div>
-        <div class="hero-stats"><span><b>9</b> interactive 3D projects</span><span><b>40+</b> tools</span><span><b>2</b> playable games</span></div>
+        
       </div>
       <div class="hero-visual"><div id="hero3d"></div>
-      <aside class="titleblock" aria-label="Summary">
-        <div class="tb-row tb-head"><span>Drawing title</span><strong>Personal portfolio</strong></div>
-        <div class="tb-grid">
-          <div><span>Engineer</span><strong>${esc(P.name)}</strong></div>
-          <div><span>Freelance experience</span><strong>5 years</strong></div>
-          <div><span>Program</span><strong>MEng Mechanical, UC</strong></div>
-          <div><span>Expected</span><strong>December 2026</strong></div>
-          <div><span>Projects</span><strong>${D.projects.length}</strong></div>
-        </div>
-        <div class="tb-row"><span>Sheet</span><strong>1 of 1</strong><span>Rev</span><strong>B</strong></div>
-      </aside></div>
+      <p class="hero-caption"><span>Gear train, drag to turn it</span><span>MEng, University of Cincinnati, Dec 2026</span></p></div>
     </section>
 
     <section class="band" id="work" aria-labelledby="work-h">
@@ -153,7 +142,7 @@
         <p class="tools-line">${esc(toolsLine(p))}</p>
       </header>
       <dl class="metrics">${p.metrics.map(m => `<div><dt>${esc(m[0])}</dt><dd>${esc(m[1])}</dd></div>`).join("")}</dl>
-      <section class="demo" aria-labelledby="demo-h"><h2 id="demo-h" class="demo-h">Work sample · ${esc(DEMO_LABEL[p.id])}</h2><div class="demo-host" id="demo-host"></div></section>
+      <section class="demo" aria-labelledby="demo-h"><h2 id="demo-h" class="demo-h">${esc(DEMO_LABEL[p.id])}</h2><div class="demo-host" id="demo-host"></div></section>
       <div class="d-grid">
         <div class="d-main">
           <section><h2>Overview</h2><p>${esc(p.description)}</p></section>
@@ -208,12 +197,6 @@
       app.querySelectorAll(".toolb").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
       document.getElementById("tool-find").innerHTML = `<strong>${esc(b.dataset.tool)}</strong> ${hits.length ? `used in ${hits.map(p => `<a href="#project-${p.id}">${esc(p.title)}</a>`).join(", ")}` : "is part of my wider toolset, not featured in these nine projects."}`;
     }));
-    const fine = matchMedia("(hover: hover) and (pointer: fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (fine) app.querySelectorAll("[data-tilt]").forEach(c => {
-      c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-        c.style.transform = `rotateX(${(0.5 - y) * 10}deg) rotateY(${(x - 0.5) * 12}deg) translateZ(0)`; c.style.setProperty("--mx", x * 100 + "%"); c.style.setProperty("--my", y * 100 + "%"); });
-      c.addEventListener("pointerleave", () => { c.style.transform = ""; });
-    });
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.remove("pre"); io.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px" });
       app.querySelectorAll(".sec-head, .card, .cap, .process li, .tg, .exp > li").forEach(el => { const r = el.getBoundingClientRect(); if (r.top > innerHeight) { el.classList.add("reveal", "pre"); io.observe(el); } });

@@ -16,10 +16,10 @@
     const renderer = new T.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
     renderer.shadowMap.enabled = o.shadows !== false; renderer.shadowMap.type = T.PCFSoftShadowMap;
-    renderer.outputEncoding = T.sRGBEncoding; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+    renderer.outputEncoding = T.sRGBEncoding; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
     if (o.clipping) renderer.localClippingEnabled = true;
     wrap.prepend(renderer.domElement);
-    const scene = new T.Scene(); const bg = new T.Color(o.bg ?? 0x0a1024); scene.background = bg;
+    const scene = new T.Scene(); const bg = new T.Color(o.bg ?? 0xe7e8e3); scene.background = bg;
     if (o.fog !== false) scene.fog = new T.Fog(bg, o.fogNear || 22, o.fogFar || 60);
     const camera = new T.PerspectiveCamera(o.fov || 42, 1, 0.05, 300); camera.position.set(...(o.cam || [8, 6, 10]));
     const controls = new T.OrbitControls(camera, renderer.domElement);
@@ -31,16 +31,16 @@
     wrap.addEventListener("pointerleave", () => { controls.enableZoom = false; });
     controls.update();
     // lights
-    scene.add(new T.HemisphereLight(0xcfe0ff, 0x1b1236, 0.9));
+    scene.add(new T.HemisphereLight(0xffffff, 0xb9b6ad, 0.85));
     const sun = new T.DirectionalLight(0xffffff, 1.25); sun.position.set(6, 12, 8); sun.castShadow = true;
     sun.shadow.mapSize.set(1024, 1024); const sc = o.shadowSize || 12; Object.assign(sun.shadow.camera, { left: -sc, right: sc, top: sc, bottom: -sc, near: 1, far: 50 }); sun.shadow.bias = -0.0005;
     scene.add(sun);
-    const rim = new T.PointLight(0x2ee6c5, 0.9, 40); rim.position.set(-8, 5, -6); scene.add(rim);
-    const warm = new T.PointLight(0xff8a3d, 0.5, 40); warm.position.set(8, 3, -8); scene.add(warm);
+    const rim = new T.PointLight(0xffffff, 0.35, 40); rim.position.set(-8, 5, -6); scene.add(rim);
+    const warm = new T.PointLight(0xfff1e0, 0.3, 40); warm.position.set(8, 3, -8); scene.add(warm);
     if (o.floor !== false) {
-      const g = new T.Mesh(new T.CircleGeometry(o.floorR || 30, 64), new T.MeshStandardMaterial({ color: 0x0d1530, roughness: 0.95, metalness: 0 }));
+      const g = new T.Mesh(new T.CircleGeometry(o.floorR || 30, 64), new T.MeshStandardMaterial({ color: 0xdcdcd5, roughness: 0.95, metalness: 0 }));
       g.rotation.x = -Math.PI / 2; g.position.y = o.floorY || 0; g.receiveShadow = true; scene.add(g);
-      const grid = new T.GridHelper(o.gridSize || 40, o.gridDiv || 40, 0x2a3a6e, 0x16214a); grid.position.y = (o.floorY || 0) + 0.002; scene.add(grid);
+      const grid = new T.GridHelper(o.gridSize || 40, o.gridDiv || 40, 0xb4b5ad, 0xc9cac3); grid.position.y = (o.floorY || 0) + 0.002; scene.add(grid);
       grid.material.transparent = true; grid.material.opacity = 0.6;
     }
     const frames = [];
@@ -70,14 +70,14 @@
   }
 
   const mat = {
-    steel: () => new T.MeshStandardMaterial({ color: 0x9fb0cc, metalness: 0.75, roughness: 0.32 }),
-    dark: () => new T.MeshStandardMaterial({ color: 0x2a3350, metalness: 0.6, roughness: 0.45 }),
+    steel: () => new T.MeshStandardMaterial({ color: 0xb8bcc2, metalness: 0.8, roughness: 0.35 }),
+    dark: () => new T.MeshStandardMaterial({ color: 0x3a3d43, metalness: 0.5, roughness: 0.5 }),
     paint: c => new T.MeshStandardMaterial({ color: c, metalness: 0.25, roughness: 0.5 }),
-    glow: c => new T.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.9, roughness: 0.4 }),
-    glass: c => new T.MeshPhysicalMaterial({ color: c || 0x9fe9ff, transparent: true, opacity: 0.16, roughness: 0.05, metalness: 0, side: T.DoubleSide, depthWrite: false })
+    glow: c => new T.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.25, roughness: 0.45 }),
+    glass: c => new T.MeshPhysicalMaterial({ color: c || 0xc9d3da, transparent: true, opacity: 0.16, roughness: 0.05, metalness: 0, side: T.DoubleSide, depthWrite: false })
   };
   function mesh(geo, m, cast = true) { const x = new T.Mesh(geo, m); x.castShadow = cast; x.receiveShadow = true; return x; }
-  function edges(geo, color = 0x2ee6c5, op = 0.6) { return new T.LineSegments(new T.EdgesGeometry(geo), new T.LineBasicMaterial({ color, transparent: true, opacity: op })); }
+  function edges(geo, color = 0x3f7f74, op = 0.6) { return new T.LineSegments(new T.EdgesGeometry(geo), new T.LineBasicMaterial({ color, transparent: true, opacity: op })); }
   function label(stageObj, text, cls = "") { const d = document.createElement("div"); d.className = "tag3d " + cls; d.textContent = text; stageObj.hud.appendChild(d); return d; }
   function placeLabel(stageObj, d, v) {
     const p = v.clone().project(stageObj.camera), w = stageObj.wrap.clientWidth, h = stageObj.wrap.clientHeight;
